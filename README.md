@@ -92,7 +92,6 @@ Chriswin J
 
 Janarthanan M
 
-Embedded Systems & IoT Project — ECE
 
 📄 License
 MIT License — free to use, modify, and distribute with attribution.
