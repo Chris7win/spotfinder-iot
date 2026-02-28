@@ -1,0 +1,66 @@
+.pm-wrap { display: flex; flex-direction: column; gap: 1.5rem; }
+.pm-loading { text-align: center; color: #aaa; padding: 2rem; }
+
+.pm-panel {
+  background: #fff; border-radius: 14px; padding: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.07); max-width: 700px;
+}
+
+.pm-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem; }
+
+.pm-title { font-size: 1rem; font-weight: 700; color: #1a1a2e; text-transform: uppercase; letter-spacing: 0.5px; }
+
+.pm-add-btn {
+  display: flex; align-items: center; gap: 0.35rem;
+  background: #3498db; color: #fff; border: none; border-radius: 8px;
+  padding: 0.5rem 1rem; font-size: 0.85rem; font-weight: 600;
+  cursor: pointer; transition: background 0.2s;
+}
+.pm-add-btn:hover { background: #2980b9; }
+
+.pm-sub { font-size: 0.82rem; color: #888; margin-bottom: 1.25rem; }
+
+.pm-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+.pm-table th {
+  text-align: left; color: #888; font-weight: 600; font-size: 0.72rem;
+  text-transform: uppercase; letter-spacing: 0.5px; padding: 0.5rem 0.75rem;
+  border-bottom: 2px solid #f0f0f0;
+}
+.pm-table td { padding: 0.65rem 0.75rem; border-bottom: 1px solid #f7f7f7; vertical-align: middle; }
+.pm-table tr:last-child td { border-bottom: none; }
+.pm-table tr:hover td { background: #fafbff; }
+
+.pm-dur-tag {
+  background: #f0f4ff; color: #3498db; border-radius: 6px;
+  padding: 4px 12px; font-size: 0.85rem; font-weight: 600;
+}
+
+.pm-price-input-wrap { display: flex; align-items: center; gap: 0.3rem; }
+.pm-rupee { color: #555; font-weight: 600; font-size: 1rem; }
+
+.pm-price-input {
+  width: 90px; padding: 0.45rem 0.6rem; border: 1.5px solid #e0e0e0;
+  border-radius: 6px; font-size: 0.95rem; font-weight: 600; outline: none;
+  transition: border-color 0.2s;
+}
+.pm-price-input:focus { border-color: #3498db; }
+
+.pm-updated { font-size: 0.78rem; color: #bbb; }
+
+.pm-actions { display: flex; align-items: center; gap: 0.5rem; }
+
+.pm-btn {
+  display: flex; align-items: center; gap: 0.3rem; padding: 5px 12px;
+  border: none; border-radius: 6px; font-size: 0.78rem; font-weight: 600;
+  cursor: pointer; transition: opacity 0.2s;
+}
+.pm-btn.save   { background: #e8fff0; color: #27ae60; }
+.pm-btn.delete { background: #fff0f0; color: #e74c3c; padding: 5px 8px; }
+.pm-btn:hover  { opacity: 0.75; }
+.pm-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.pm-feedback { font-size: 0.75rem; font-weight: 600; margin-top: 2px; }
+.pm-feedback.ok  { color: #27ae60; }
+.pm-feedback.err { color: #e74c3c; }
+
+.pm-empty { text-align: center; color: #ccc; padding: 2rem; }

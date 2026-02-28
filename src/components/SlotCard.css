@@ -1,0 +1,68 @@
+.slot-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border-left: 5px solid transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.slot-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+}
+
+.slot-card.available { border-left-color: #2ecc71; }
+.slot-card.occupied  { border-left-color: #e74c3c; }
+.slot-card.booked    { border-left-color: #f39c12; }
+
+.slot-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.slot-id {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #1a1a2e;
+}
+
+.slot-status-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+.slot-status-dot.available { background: #2ecc71; }
+.slot-status-dot.occupied  { background: #e74c3c; }
+.slot-status-dot.booked    { background: #f39c12; }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.2); }
+}
+
+.slot-status-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+.slot-status-label.available { background: #e8fff0; color: #2ecc71; }
+.slot-status-label.occupied  { background: #fff0f0; color: #e74c3c; }
+.slot-status-label.booked    { background: #fff8e8; color: #f39c12; }
+
+.slot-meta {
+  font-size: 0.78rem;
+  color: #666;
+}

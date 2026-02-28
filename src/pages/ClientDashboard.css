@@ -1,0 +1,156 @@
+.client-page {
+  min-height: 100vh;
+  background: #f5f6fa;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.client-hero {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  padding: 4rem 1.5rem;
+  text-align: center;
+  color: #fff;
+}
+
+.client-hero-content {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.hero-badge {
+  display: inline-block;
+  background: rgba(52,152,219,0.2);
+  border: 1px solid rgba(52,152,219,0.4);
+  color: #3498db;
+  padding: 4px 16px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.hero-title {
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
+  font-weight: 900;
+  margin-bottom: 0.5rem;
+  line-height: 1.15;
+}
+
+.hero-sub {
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 2rem;
+  font-size: 1rem;
+}
+
+.hero-counter {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.hero-count {
+  font-size: 4rem;
+  font-weight: 900;
+  color: #2ecc71;
+  line-height: 1;
+}
+
+.hero-count-label {
+  font-size: 1.1rem;
+  color: rgba(255,255,255,0.7);
+}
+
+.client-section {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem;
+}
+
+.section-title {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #1a1a2e;
+  margin-bottom: 1.5rem;
+}
+
+.client-loading {
+  text-align: center;
+  color: #aaa;
+  padding: 2rem;
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 1rem;
+}
+
+.pricing-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.25rem 1rem;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.pricing-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+}
+
+.pricing-duration {
+  font-size: 0.85rem;
+  color: #666;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.pricing-amount {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #1a1a2e;
+}
+
+.client-cta {
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  color: #fff;
+  text-align: center;
+  padding: 3rem 1.5rem;
+}
+
+.client-cta h3 { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; }
+.client-cta p  { opacity: 0.85; margin-bottom: 1.5rem; }
+
+.cta-btn {
+  background: #fff;
+  color: #3498db;
+  border: none;
+  border-radius: 30px;
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+
+.cta-btn:hover {
+  transform: scale(1.04);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+}
+
+.client-footer {
+  background: #1a1a2e;
+  color: rgba(255,255,255,0.5);
+  padding: 1.5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.85rem;
+}
+
+.client-footer strong { color: rgba(255,255,255,0.8); }

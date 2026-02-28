@@ -1,0 +1,28 @@
+.an-wrap { display: flex; flex-direction: column; gap: 1.5rem; }
+.an-loading { text-align: center; color: #aaa; padding: 2rem; }
+
+.an-stats-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem;
+}
+
+.an-stat-card {
+  background: #fff; border-radius: 12px; padding: 1.25rem 1.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  display: flex; flex-direction: column; gap: 0.3rem; transition: transform 0.2s;
+}
+.an-stat-card:hover { transform: translateY(-2px); }
+.an-stat-value { font-size: 2rem; font-weight: 900; color: #1a1a2e; line-height: 1; }
+.an-stat-label { font-size: 0.75rem; color: #888; font-weight: 600; text-transform: uppercase; letter-spacing: 0.7px; }
+.an-stat-sub { font-size: 0.75rem; color: #bbb; }
+
+.an-chart-panel {
+  background: #fff; border-radius: 14px; padding: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+}
+
+.an-chart-title {
+  font-size: 0.9rem; font-weight: 700; color: #1a1a2e;
+  margin-bottom: 1.25rem; text-transform: uppercase; letter-spacing: 0.5px;
+}
+
+.an-empty { text-align: center; color: #ccc; padding: 2rem; }

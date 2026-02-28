@@ -1,0 +1,55 @@
+.ac-wrap { display: flex; flex-direction: column; gap: 1.5rem; position: relative; }
+.ac-loading { text-align: center; color: #aaa; padding: 2rem; }
+
+.ac-toast {
+  position: fixed; bottom: 2rem; right: 2rem; background: #1a1a2e; color: #fff;
+  padding: 0.75rem 1.5rem; border-radius: 8px; font-size: 0.9rem; z-index: 9999;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.ac-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+@media (max-width: 640px) { .ac-row { grid-template-columns: 1fr; } }
+
+.ac-panel {
+  background: #fff; border-radius: 14px; padding: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+}
+
+.ac-panel-title {
+  font-size: 0.95rem; font-weight: 700; color: #1a1a2e;
+  margin-bottom: 1.25rem; text-transform: uppercase; letter-spacing: 0.5px;
+}
+
+.ac-period-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-bottom: 1rem; }
+
+.ac-period-card {
+  background: #f9f9f9; border-radius: 8px; padding: 0.85rem 0.75rem;
+  display: flex; flex-direction: column; gap: 0.3rem; text-align: center;
+}
+.ac-period-label { font-size: 0.7rem; color: #888; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+.ac-period-value { font-size: 1.4rem; font-weight: 800; line-height: 1; }
+
+.ac-method-row { display: flex; gap: 0.75rem; }
+.ac-method-card {
+  flex: 1; background: #f5f6fa; border-radius: 8px; padding: 0.75rem;
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 0.88rem; color: #555;
+}
+.ac-method-card strong { color: #1a1a2e; font-weight: 700; }
+
+.ac-total-panel { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+.ac-total-left { display: flex; flex-direction: column; gap: 0.35rem; }
+.ac-total-label { font-size: 0.8rem; color: #888; font-weight: 600; text-transform: uppercase; letter-spacing: 0.7px; }
+.ac-total-value { font-size: 2.5rem; font-weight: 900; color: #1a1a2e; line-height: 1; }
+.ac-total-sub { font-size: 0.8rem; color: #aaa; }
+
+.ac-total-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+
+.ac-btn {
+  display: flex; align-items: center; gap: 0.4rem; padding: 0.65rem 1.25rem;
+  border: none; border-radius: 8px; font-size: 0.88rem; font-weight: 600;
+  cursor: pointer; transition: opacity 0.2s;
+}
+.ac-btn:hover { opacity: 0.85; }
+.ac-btn.pdf   { background: #f5f0ff; color: #9b59b6; }
+.ac-btn.excel { background: #e8fff0; color: #27ae60; }

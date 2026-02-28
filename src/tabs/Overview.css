@@ -1,0 +1,100 @@
+.overview { display: flex; flex-direction: column; gap: 1.5rem; }
+
+.ov-loading { text-align: center; color: #aaa; padding: 1rem; }
+
+.ov-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1rem;
+}
+
+.ov-stat-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  border-top: 4px solid #ccc;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  transition: transform 0.2s;
+}
+
+.ov-stat-card:hover { transform: translateY(-2px); }
+.ov-stat-icon { display: flex; }
+.ov-stat-value { font-size: 2.2rem; font-weight: 900; line-height: 1; }
+.ov-stat-label { font-size: 0.75rem; color: #888; font-weight: 600; text-transform: uppercase; letter-spacing: 0.7px; }
+
+.ov-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+@media (max-width: 640px) { .ov-row { grid-template-columns: 1fr; } }
+
+.ov-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.ov-card-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.ov-status-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.88rem;
+  color: #555;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.ov-status-row:last-child { border-bottom: none; }
+.ov-muted { color: #999; font-size: 0.82rem; }
+
+.ov-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.ov-badge.online  { background: #e8fff0; color: #2ecc71; }
+.ov-badge.offline { background: #fff0f0; color: #e74c3c; }
+
+.ov-empty { color: #bbb; font-size: 0.88rem; text-align: center; padding: 1rem; }
+
+.ov-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+.ov-table th { text-align: left; color: #888; font-weight: 600; padding: 0.35rem 0.75rem; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid #f0f0f0; }
+.ov-table td { padding: 0.5rem 0.75rem; border-bottom: 1px solid #f9f9f9; color: #444; }
+.ov-table tr:last-child td { border-bottom: none; }
+
+.ov-slot-tag {
+  background: #1a1a2e;
+  color: #fff;
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.ov-type-tag {
+  background: #eef4fd;
+  color: #3498db;
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
