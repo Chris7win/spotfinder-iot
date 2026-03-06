@@ -1,7 +1,7 @@
-name: spotfinder_iot
-description: "SPOTFINDER IoT - Real-time Smart Parking System"
+name: spot_iot
+description: "SpotFinder IOT — Smart Parking Management System"
 publish_to: 'none'
-version: 2.0.0+1
+version: 1.0.0+1
 
 environment:
   sdk: ^3.6.0
@@ -16,16 +16,31 @@ dependencies:
   google_fonts: ^6.0.0
   intl: ^0.18.0
   shared_preferences: ^2.2.0
-  flutter_dotenv: ^5.1.0
   qr_flutter: ^4.1.0
+  flutter_dotenv: ^5.1.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.13.1
 
 flutter:
   uses-material-design: true
   assets:
     - .env
     - assets/images/
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/logo.png"
+  min_sdk_android: 21
+  adaptive_icon_background: "#1a1a2e"
+  adaptive_icon_foreground: "assets/images/logo.png"
+  web:
+    generate: false
+  windows:
+    generate: false
+  macos:
+    generate: false

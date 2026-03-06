@@ -23,6 +23,9 @@ import 'screens/qr_code_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Load .env file at runtime
+  await dotenv.load(fileName: '.env');
+
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -35,21 +38,33 @@ void main() async {
     systemNavigationBarIconBrightness: Brightness.light,
   ));
 
-  await dotenv.load(fileName: '.env');
+  final supabaseUrl = dotenv.env['SUPABASE_URL'] ?? '';
+  final supabaseAnonKey = dotenv.env['SUPABASE_ANON_KEY'] ?? '';
+
+  debugPrint('Supabase URL: $supabaseUrl');
+  debugPrint('Supabase Key: ${supabaseAnonKey.isNotEmpty ? "SET" : "EMPTY"}');
 
   await Supabase.initialize(
-    url: dotenv.env['SUPABASE_URL']!,
-    anonKey: dotenv.env['SUPABASE_ANON_KEY']!,
+    url: supabaseUrl,
+    anonKey: supabaseAnonKey,
   );
+
+  final mqttBrokerHost = dotenv.env['MQTT_BROKER_HOST'] ?? 'broker.hivemq.com';
+  final mqttBrokerPort = dotenv.env['MQTT_BROKER_PORT'] ?? '1883';
+  final mqttClientId =
+      dotenv.env['MQTT_CLIENT_ID'] ?? 'spotfinder_flutter_client';
+  final mqttTopic = dotenv.env['MQTT_TOPIC'] ?? 'spotfinder/parking/status';
+  final mqttUsername = dotenv.env['MQTT_USERNAME'] ?? '';
+  final mqttPassword = dotenv.env['MQTT_PASSWORD'] ?? '';
 
   final mqttService = MqttService();
   mqttService.connect(
-    broker: dotenv.env['MQTT_BROKER_HOST']!,
-    port: int.parse(dotenv.env['MQTT_BROKER_PORT'] ?? '8883'),
-    clientId: dotenv.env['MQTT_CLIENT_ID'] ?? 'spotfinder_flutter_client',
-    topic: dotenv.env['MQTT_TOPIC'] ?? 'spotfinder/parking/status',
-    username: dotenv.env['MQTT_USERNAME'],
-    password: dotenv.env['MQTT_PASSWORD'],
+    broker: mqttBrokerHost,
+    port: int.parse(mqttBrokerPort),
+    clientId: mqttClientId,
+    topic: mqttTopic,
+    username: mqttUsername.isEmpty ? null : mqttUsername,
+    password: mqttPassword.isEmpty ? null : mqttPassword,
   );
 
   runApp(SpotFinderApp(mqttService: mqttService));

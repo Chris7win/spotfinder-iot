@@ -149,20 +149,23 @@ class MqttService {
     }
   }
 
+  /// Parses hardware payload: {"slot1":0,"slot2":1,"slot3":0,"slot4":1,"free":2,"total":4,"ts":12345}
+  /// 0 = free, 1 = occupied. Keys matching "slotN" are extracted.
   void _handleSlotUpdate(Map<String, dynamic> data) {
-    final slots = data['slots'] as List<dynamic>?;
-    if (slots == null) return;
-
     final updates = <int, String>{};
-    for (final slot in slots) {
-      final id = slot['id'] as int?;
-      final status = slot['status'] as String?;
-      if (id != null && status != null) {
-        updates[id] = status;
+
+    data.forEach((key, value) {
+      // Match keys like "slot1", "slot2", etc.
+      if (key.startsWith('slot') && key.length > 4) {
+        final slotNum = int.tryParse(key.substring(4));
+        if (slotNum != null && value is int) {
+          updates[slotNum] = value == 1 ? 'occupied' : 'free';
+        }
       }
-    }
+    });
 
     if (updates.isNotEmpty) {
+      debugPrint('MQTT: Slot updates → $updates');
       _slotController.add(updates);
     }
   }

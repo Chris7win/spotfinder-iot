@@ -114,7 +114,7 @@ class _BookingFormScreenState extends State<BookingFormScreen> {
       'vehicleType': _selectedVehicleType,
       'vehicleRegNo': _regNoController.text.trim(),
       'userPhone': _phoneController.text.trim(),
-      'userAddress': _addressController.text.trim(),
+      'userName': _nameController.text.trim(),
       'arrivingTime': arrivingDateTime,
       'paymentAmount': amount,
       'durationLabel': _durationLabels[_selectedDuration]!,

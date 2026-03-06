@@ -1,29 +1,29 @@
 import 'dart:convert';
 
 class Booking {
-  final String id;
-  final String userId;
-  final int slotNumber;
-  final DateTime bookingStart;
-  final DateTime bookingEnd;
+  final String id; // DB: booking_id
+  final int slotNumber; // DB: slot_id
+  final DateTime bookingStart; // DB: arrival_time
+  final String durationStr; // DB: duration (varchar, e.g. "1 hour")
+  final DateTime bookingEnd; // computed from arrival_time + duration
   final String status;
-  final double paymentAmount;
+  final double paymentAmount; // DB: amount
   final String paymentStatus;
   final String vehicleType;
-  final String vehicleRegNo;
-  final String userPhone;
-  final String userAddress;
-  final DateTime arrivingTime;
-  final String? qrCode;
-  final DateTime? arrivedAt;
-  final DateTime? departedAt;
+  final String vehicleRegNo; // DB: vehicle_number
+  final String userPhone; // DB: phone
+  final String userName; // DB: user_name
+  final String? qrCode; // DB: qr_token
   final DateTime createdAt;
+
+  // Keep arrivingTime as alias for bookingStart for backward compat
+  DateTime get arrivingTime => bookingStart;
 
   Booking({
     required this.id,
-    required this.userId,
     required this.slotNumber,
     required this.bookingStart,
+    required this.durationStr,
     required this.bookingEnd,
     required this.status,
     required this.paymentAmount,
@@ -31,59 +31,72 @@ class Booking {
     required this.vehicleType,
     required this.vehicleRegNo,
     required this.userPhone,
-    required this.userAddress,
-    required this.arrivingTime,
+    required this.userName,
     this.qrCode,
-    this.arrivedAt,
-    this.departedAt,
     required this.createdAt,
   });
 
   factory Booking.fromMap(Map<String, dynamic> map) {
+    final arrivalTime = map['arrival_time'] != null
+        ? DateTime.parse(map['arrival_time'] as String)
+        : DateTime.now();
+
+    final durationStr = map['duration'] as String? ?? '1 hour';
+    final endTime = _computeEndTime(arrivalTime, durationStr);
+
     return Booking(
-      id: map['id'] as String,
-      userId: map['user_id'] as String,
-      slotNumber: map['slot_number'] as int,
-      bookingStart: DateTime.parse(map['booking_start'] as String),
-      bookingEnd: DateTime.parse(map['booking_end'] as String),
+      id: map['booking_id'] as String,
+      slotNumber: map['slot_id'] as int,
+      bookingStart: arrivalTime,
+      durationStr: durationStr,
+      bookingEnd: endTime,
       status: map['status'] as String? ?? 'pending',
-      paymentAmount: (map['payment_amount'] as num?)?.toDouble() ?? 0.0,
+      paymentAmount: (map['amount'] as num?)?.toDouble() ?? 0.0,
       paymentStatus: map['payment_status'] as String? ?? 'unpaid',
       vehicleType: map['vehicle_type'] as String? ?? '2_wheeler',
-      vehicleRegNo: map['vehicle_reg_no'] as String? ?? '',
-      userPhone: map['user_phone'] as String? ?? '',
-      userAddress: map['user_address'] as String? ?? '',
-      arrivingTime: map['arriving_time'] != null
-          ? DateTime.parse(map['arriving_time'] as String)
-          : DateTime.now(),
-      qrCode: map['qr_code'] as String?,
-      arrivedAt: map['arrived_at'] != null
-          ? DateTime.parse(map['arrived_at'] as String)
-          : null,
-      departedAt: map['departed_at'] != null
-          ? DateTime.parse(map['departed_at'] as String)
-          : null,
+      vehicleRegNo: map['vehicle_number'] as String? ?? '',
+      userPhone: map['phone'] as String? ?? '',
+      userName: map['user_name'] as String? ?? '',
+      qrCode: map['qr_token'] as String?,
       createdAt: map['created_at'] != null
           ? DateTime.parse(map['created_at'] as String)
           : DateTime.now(),
     );
   }
 
+  /// Converts duration string like "1 hour", "2 hours", "30 minutes" to a Duration
+  static DateTime _computeEndTime(DateTime start, String durationStr) {
+    final lower = durationStr.toLowerCase().trim();
+
+    // Try parsing patterns like "1 hour", "2 hours", "30 minutes", "1.5 hours"
+    final hourMatch = RegExp(r'(\d+\.?\d*)\s*hour').firstMatch(lower);
+    if (hourMatch != null) {
+      final hours = double.parse(hourMatch.group(1)!);
+      return start.add(Duration(minutes: (hours * 60).round()));
+    }
+
+    final minMatch = RegExp(r'(\d+)\s*min').firstMatch(lower);
+    if (minMatch != null) {
+      return start.add(Duration(minutes: int.parse(minMatch.group(1)!)));
+    }
+
+    // Default: 1 hour
+    return start.add(const Duration(hours: 1));
+  }
+
   Map<String, dynamic> toInsertMap() {
     return {
-      'user_id': userId,
-      'slot_number': slotNumber,
-      'booking_start': bookingStart.toIso8601String(),
-      'booking_end': bookingEnd.toIso8601String(),
+      'slot_id': slotNumber,
+      'arrival_time': bookingStart.toIso8601String(),
+      'duration': durationStr,
       'status': status,
-      'payment_amount': paymentAmount,
+      'amount': paymentAmount,
       'payment_status': paymentStatus,
       'vehicle_type': vehicleType,
-      'vehicle_reg_no': vehicleRegNo,
-      'user_phone': userPhone,
-      'user_address': userAddress,
-      'arriving_time': arrivingTime.toIso8601String(),
-      'qr_code': qrCode,
+      'vehicle_number': vehicleRegNo,
+      'phone': userPhone,
+      'user_name': userName,
+      'qr_token': qrCode,
     };
   }
 
@@ -91,7 +104,7 @@ class Booking {
     final data = {
       'booking_id': id,
       'slot': slotNumber,
-      'user': userId,
+      'user': userName,
       'start': bookingStart.toIso8601String(),
       'end': bookingEnd.toIso8601String(),
       'vehicle': vehicleRegNo,

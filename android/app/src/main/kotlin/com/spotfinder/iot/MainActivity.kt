@@ -1,4 +1,4 @@
-package com.example.spotfinder_iot
+package com.spotfinder.iot
 
 import io.flutter.embedding.android.FlutterActivity
 

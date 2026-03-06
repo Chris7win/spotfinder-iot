@@ -520,9 +520,11 @@ class _ActiveBookingCard extends StatelessWidget {
   const _ActiveBookingCard({required this.booking, required this.onRefresh});
 
   String _formatTime(DateTime dt) {
-    final h = dt.hour > 12 ? dt.hour - 12 : (dt.hour == 0 ? 12 : dt.hour);
-    final m = dt.minute.toString().padLeft(2, '0');
-    final ampm = dt.hour >= 12 ? 'PM' : 'AM';
+    final local = dt.toLocal();
+    final h =
+        local.hour > 12 ? local.hour - 12 : (local.hour == 0 ? 12 : local.hour);
+    final m = local.minute.toString().padLeft(2, '0');
+    final ampm = local.hour >= 12 ? 'PM' : 'AM';
     return '$h:$m $ampm';
   }
 

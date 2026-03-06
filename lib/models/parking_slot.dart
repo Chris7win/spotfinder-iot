@@ -19,7 +19,7 @@ class ParkingSlot {
     return ParkingSlot(
       slotNumber: map['slot_number'] as int,
       physicalStatus: map['physical_status'] as String? ?? 'free',
-      displayStatus: map['display_status'] as String? ?? 'F',
+      displayStatus: map['display_status'] as String? ?? 'FREE',
       bookedByUserId: map['booked_by'] as String?,
       lastUpdated: map['last_updated'] != null
           ? DateTime.parse(map['last_updated'] as String)

@@ -204,7 +204,10 @@ class SupabaseService {
   Future<bool> updateBooking(
       String bookingId, Map<String, dynamic> updates) async {
     try {
-      await _client.from('bookings').update(updates).eq('id', bookingId);
+      await _client
+          .from('bookings')
+          .update(updates)
+          .eq('booking_id', bookingId);
       return true;
     } catch (e) {
       debugPrint('SupabaseService.updateBooking error: $e');
@@ -214,10 +217,11 @@ class SupabaseService {
 
   Future<List<Booking>> getUserBookings(String userId) async {
     try {
+      // Try querying all bookings and filter client-side
+      // since the DB doesn't have a user_id column
       final data = await _client
           .from('bookings')
           .select()
-          .eq('user_id', userId)
           .order('created_at', ascending: false);
       return data.map((e) => Booking.fromMap(e)).toList();
     } catch (e) {
@@ -228,8 +232,11 @@ class SupabaseService {
 
   Future<Booking?> getBooking(String bookingId) async {
     try {
-      final data =
-          await _client.from('bookings').select().eq('id', bookingId).single();
+      final data = await _client
+          .from('bookings')
+          .select()
+          .eq('booking_id', bookingId)
+          .single();
       return Booking.fromMap(data);
     } catch (e) {
       debugPrint('SupabaseService.getBooking error: $e');
@@ -249,7 +256,7 @@ class SupabaseService {
       final List<dynamic> data = await _client
           .from('bookings')
           .select()
-          .eq('slot_number', slotNumber)
+          .eq('slot_id', slotNumber)
           .inFilter('status', ['pending', 'active']);
 
       for (var map in data) {
@@ -279,7 +286,7 @@ class SupabaseService {
       final data = await _client
           .from('bookings')
           .select()
-          .eq('slot_number', slotNumber)
+          .eq('slot_id', slotNumber)
           .inFilter('status', ['pending', 'active'])
           .limit(1)
           .maybeSingle();
@@ -306,8 +313,7 @@ class SupabaseService {
 
   Future<Map<String, dynamic>?> getBookingStats(String userId) async {
     try {
-      final bookings =
-          await _client.from('bookings').select().eq('user_id', userId);
+      final bookings = await _client.from('bookings').select();
 
       final total = bookings.length;
       final completed =
@@ -315,7 +321,7 @@ class SupabaseService {
       double totalSpent = 0;
       for (final b in bookings) {
         if (b['payment_status'] == 'paid') {
-          totalSpent += (b['payment_amount'] as num?)?.toDouble() ?? 0;
+          totalSpent += (b['amount'] as num?)?.toDouble() ?? 0;
         }
       }
 

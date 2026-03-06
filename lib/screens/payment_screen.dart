@@ -64,8 +64,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
       vehicleType: widget.args['vehicleType'] as String,
       vehicleRegNo: widget.args['vehicleRegNo'] as String,
       userPhone: widget.args['userPhone'] as String,
-      userAddress: widget.args['userAddress'] as String,
-      arrivingTime: widget.args['arrivingTime'] as DateTime,
+      userName: widget.args['userName'] as String,
+      durationLabel: widget.args['durationLabel'] as String,
       paymentAmount: widget.args['paymentAmount'] as double,
     );
 

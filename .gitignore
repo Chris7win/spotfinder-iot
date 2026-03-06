@@ -31,8 +31,12 @@ migrate_working_dir/
 /build/
 pubspec.lock
 
-# Environment
+# Credentials
 .env
+*.env
+android/key.properties
+*.jks
+*.keystore
 
 # Platform
 /android/app/debug

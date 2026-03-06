@@ -65,8 +65,8 @@ class BookingProvider extends ChangeNotifier {
     required String vehicleType,
     required String vehicleRegNo,
     required String userPhone,
-    required String userAddress,
-    required DateTime arrivingTime,
+    required String userName,
+    required String durationLabel,
     required double paymentAmount,
   }) async {
     if (_userId == null) return null;
@@ -76,10 +76,12 @@ class BookingProvider extends ChangeNotifier {
       final conflict = await _supabase.getConflictingBooking(
           slotNumber, bookingStart, bookingEnd);
       if (conflict != null) {
+        final localStart = conflict.bookingStart.toLocal();
+        final localEnd = conflict.bookingEnd.toLocal();
         final startStr =
-            "${conflict.bookingStart.hour}:${conflict.bookingStart.minute.toString().padLeft(2, '0')}";
+            "${localStart.hour}:${localStart.minute.toString().padLeft(2, '0')}";
         final endStr =
-            "${conflict.bookingEnd.hour}:${conflict.bookingEnd.minute.toString().padLeft(2, '0')}";
+            "${localEnd.hour}:${localEnd.minute.toString().padLeft(2, '0')}";
         _error = 'Conflict: Slot reserved from $startStr to $endStr';
         notifyListeners();
         return null;
@@ -94,19 +96,17 @@ class BookingProvider extends ChangeNotifier {
       );
 
       final booking = await _supabase.createBooking({
-        'user_id': _userId,
-        'slot_number': slotNumber,
-        'booking_start': bookingStart.toUtc().toIso8601String(),
-        'booking_end': bookingEnd.toUtc().toIso8601String(),
+        'slot_id': slotNumber,
+        'arrival_time': bookingStart.toUtc().toIso8601String(),
+        'duration': durationLabel,
         'status': 'pending',
-        'payment_amount': paymentAmount,
+        'amount': paymentAmount,
         'payment_status': 'paid',
         'vehicle_type': vehicleType,
-        'vehicle_reg_no': vehicleRegNo,
-        'user_phone': userPhone,
-        'user_address': userAddress,
-        'arriving_time': arrivingTime.toUtc().toIso8601String(),
-        'qr_code': qrData,
+        'vehicle_number': vehicleRegNo,
+        'phone': userPhone,
+        'user_name': userName,
+        'qr_token': qrData,
       });
 
       if (booking != null) {
@@ -130,14 +130,15 @@ class BookingProvider extends ChangeNotifier {
     required String vehicleRegNo,
     required double paymentAmount,
   }) {
-    return '{"user":"$_userId","slot":$slotNumber,"start":"${bookingStart.toIso8601String()}","end":"${bookingEnd.toIso8601String()}","vehicle":"$vehicleRegNo","amount":$paymentAmount}';
+    // Keep under 100 chars for varchar(100) qr_token column
+    final ts = bookingStart.millisecondsSinceEpoch ~/ 1000;
+    return 'SF-S${slotNumber}-T$ts-${vehicleRegNo.toUpperCase()}-${paymentAmount.toStringAsFixed(0)}';
   }
 
   Future<bool> endSession(String bookingId) async {
     try {
       final success = await _supabase.updateBooking(bookingId, {
         'status': 'completed',
-        'departed_at': DateTime.now().toIso8601String(),
       });
       if (success) await loadBookings();
       return success;
@@ -176,7 +177,6 @@ class BookingProvider extends ChangeNotifier {
       if (booking != null) {
         await _supabase.updateBooking(booking.id, {
           'status': 'active',
-          'arrived_at': DateTime.now().toIso8601String(),
         });
         await loadBookings();
       }
