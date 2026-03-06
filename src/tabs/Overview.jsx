@@ -1,19 +1,36 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../supabase/client'
+import { useMqttSlots } from '../hooks/useMqttSlots'
 import { Activity, Car, CheckCircle, Clock, TrendingUp, Wifi, WifiOff } from 'lucide-react'
 import './Overview.css'
 
+const HW_IDS = [1, 2, 3, 4]
+
+function hwHeartbeatStatus(hb) {
+  if (!hb) return { label: 'No data', cls: 'ov-muted' }
+  const age = Date.now() - new Date(hb).getTime()
+  if (age < 5 * 60 * 1000)  return { label: 'Live',    cls: 'ov-hw-live'   }
+  if (age < 15 * 60 * 1000) return { label: 'Stale',   cls: 'ov-hw-stale'  }
+  return                            { label: 'Offline', cls: 'ov-hw-offline' }
+}
+
 function Overview() {
-  const [slots, setSlots]       = useState([])
-  const [todayStats, setToday]  = useState({ cars: 0, revenue: 0, active: 0 })
-  const [recentLogs, setLogs]   = useState([])
-  const [loading, setLoading]   = useState(true)
-  const [lastPing, setLastPing] = useState(null)
+  const [slots,       setSlots]     = useState([])
+  const [slotStatus,  setSlotStatus] = useState([])
+  const [todayStats,  setToday]     = useState({ cars: 0, revenue: 0, active: 0 })
+  const [recentLogs,  setLogs]      = useState([])
+  const [loading,     setLoading]   = useState(true)
+  const [lastPing,    setLastPing]  = useState(null)
+
+  const { connected, lastSeen } = useMqttSlots()
 
   useEffect(() => {
     const load = async () => {
       const { data: s } = await supabase.from('parking_slots').select('*').order('slot_id')
       if (s) setSlots(s)
+
+      const { data: ss } = await supabase.from('slot_status').select('*').order('slot_num')
+      if (ss) setSlotStatus(ss)
 
       const today = new Date().toISOString().split('T')[0]
 
@@ -46,7 +63,7 @@ function Overview() {
         .select('log_id', { count: 'exact', head: true })
         .gte('date', today)
 
-      // Last updated slot as proxy for MQTT ping
+      // Last updated slot as proxy for DB ping
       const latestSlot = s?.sort((a, b) => new Date(b.last_updated) - new Date(a.last_updated))[0]
       if (latestSlot?.last_updated) setLastPing(new Date(latestSlot.last_updated))
 
@@ -72,18 +89,19 @@ function Overview() {
     return () => supabase.removeChannel(ch)
   }, [])
 
-  const total     = slots.length
-  const available = slots.filter(s => !s.is_occupied && !s.is_booked).length
-  const occupied  = slots.filter(s => s.is_occupied).length
-  const booked    = slots.filter(s => s.is_booked && !s.is_occupied).length
+  const activeSlots = slots.filter(s => s.is_active)
+  const available   = activeSlots.filter(s => !s.is_occupied && !s.is_booked).length
+  const occupied    = activeSlots.filter(s => s.is_occupied).length
+  const booked      = activeSlots.filter(s => s.is_booked && !s.is_occupied).length
+  const activeCount = activeSlots.length
 
   const hwOnline = lastPing && (Date.now() - lastPing.getTime()) < 5 * 60 * 1000
 
   const statCards = [
-    { label: 'Total Slots',  value: total,     color: '#3498db', icon: <Car size={20} /> },
-    { label: 'Available',    value: available,  color: '#2ecc71', icon: <CheckCircle size={20} /> },
-    { label: 'Occupied',     value: occupied,   color: '#e74c3c', icon: <Activity size={20} /> },
-    { label: 'Reserved',     value: booked,     color: '#f39c12', icon: <Clock size={20} /> },
+    { label: 'Active Slots', value: activeCount, sub: 'of 20 configured', color: '#3498db', icon: <Car size={20} /> },
+    { label: 'Available',    value: available,  sub: null, color: '#2ecc71', icon: <CheckCircle size={20} /> },
+    { label: 'Occupied',     value: occupied,   sub: null, color: '#e74c3c', icon: <Activity size={20} /> },
+    { label: 'Reserved',     value: booked,     sub: null, color: '#f39c12', icon: <Clock size={20} /> },
   ]
 
   return (
@@ -97,6 +115,7 @@ function Overview() {
             <div className="ov-stat-icon" style={{ color: c.color }}>{c.icon}</div>
             <div className="ov-stat-value" style={{ color: c.color }}>{c.value}</div>
             <div className="ov-stat-label">{c.label}</div>
+            {c.sub && <div className="ov-stat-sub">{c.sub}</div>}
           </div>
         ))}
       </div>
@@ -105,22 +124,50 @@ function Overview() {
         {/* System Status */}
         <div className="ov-card">
           <h3 className="ov-card-title">
-            {hwOnline ? <Wifi size={16} color="#2ecc71" /> : <WifiOff size={16} color="#e74c3c" />}
+            {connected ? <Wifi size={16} color="#2ecc71" /> : <WifiOff size={16} color="#e74c3c" />}
             System Status
           </h3>
           <div className="ov-status-row">
-            <span>Hardware</span>
-            <span className={`ov-badge ${hwOnline ? 'online' : 'offline'}`}>
-              {hwOnline ? 'Online' : 'Offline'}
+            <span>MQTT Broker</span>
+            <span className={`ov-badge ${connected ? 'online' : 'offline'}`}>
+              {connected ? 'Connected' : 'Disconnected'}
             </span>
           </div>
           <div className="ov-status-row">
-            <span>MQTT Last Ping</span>
-            <span className="ov-muted">{lastPing ? lastPing.toLocaleTimeString('en-IN') : '—'}</span>
+            <span>MQTT Last Message</span>
+            <span className="ov-muted">{lastSeen ? lastSeen.toLocaleTimeString('en-IN') : '—'}</span>
           </div>
           <div className="ov-status-row">
             <span>Supabase Realtime</span>
             <span className="ov-badge online">Connected</span>
+          </div>
+          <div className="ov-status-row">
+            <span>DB Last Update</span>
+            <span className={`ov-badge ${hwOnline ? 'online' : 'offline'}`}>
+              {hwOnline ? 'Recent' : 'Stale'}
+            </span>
+          </div>
+
+          {/* Hardware heartbeat per slot */}
+          <div className="ov-hw-section">
+            <div className="ov-hw-title">Hardware Slots Heartbeat</div>
+            {HW_IDS.map(id => {
+              const ss  = slotStatus.find(s => s.slot_num === id)
+              const hb  = hwHeartbeatStatus(ss?.last_heartbeat)
+              return (
+                <div className="ov-status-row" key={id}>
+                  <span>Slot {id}</span>
+                  <div className="ov-hw-right">
+                    <span className={`ov-hw-label ${hb.cls}`}>{hb.label}</span>
+                    {ss?.last_heartbeat && (
+                      <span className="ov-muted">
+                        {new Date(ss.last_heartbeat).toLocaleTimeString('en-IN')}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              )
+            })}
           </div>
         </div>
 

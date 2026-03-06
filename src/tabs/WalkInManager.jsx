@@ -102,11 +102,13 @@ function SessionRow({ session, pricing, onEnd, onBill, onPrint, onWA }) {
   }, [session.entry_time])
 
   const elapsedMin = elapsed / 60
-  let amount = session.amount
-  if (session.duration_type === 'open') {
-    const hourlyRate = pricing.find(p => p.duration_label === '1 Hour')?.price || 25
-    amount = Math.ceil(elapsedMin / 60) * hourlyRate
-  }
+  // open session: duration_minutes is null (no fixed duration was set)
+  // Treat session as open if no amount was pre-set (open/unknown duration)
+  const isOpen = !session.amount || session.amount === 0
+  const hourlyRate = pricing.find(p => p.duration_label === '1 Hour')?.price || 25
+  let amount = isOpen
+    ? Math.ceil(Math.max(elapsedMin, 1) / 60) * hourlyRate
+    : session.amount
 
   return (
     <tr>
@@ -116,7 +118,7 @@ function SessionRow({ session, pricing, onEnd, onBill, onPrint, onWA }) {
       <td>{session.vehicle_type}</td>
       <td>{new Date(session.entry_time).toLocaleTimeString('en-IN')}</td>
       <td className="wi-timer">{fmtTimer(elapsed)}</td>
-      <td>{session.duration_type === 'open' ? 'Open' : fmtDuration(session.duration_minutes || 0)}</td>
+      <td>{isOpen ? 'Open (live)' : fmtDuration(elapsed)}</td>
       <td className="wi-amount">₹{amount}</td>
       <td>{session.payment_method}</td>
       <td>
@@ -156,8 +158,8 @@ function WalkInManager() {
     if (s) setSessions(s)
 
     const { data: sl } = await supabase
-      .from('parking_slots').select('slot_id, is_occupied, is_booked').order('slot_id')
-    if (sl) setAvSlots(sl.filter(s => !s.is_occupied && !s.is_booked))
+      .from('parking_slots').select('slot_id, is_occupied, is_booked, is_active, location').order('slot_id')
+    if (sl) setAvSlots(sl.filter(s => s.is_active))
 
     const { data: p } = await supabase.from('pricing').select('*').order('price')
     if (p) setPricing(p)
@@ -192,14 +194,9 @@ function WalkInManager() {
       phone: form.phone,
       vehicle_number: form.vehicle_number.toUpperCase(),
       vehicle_type: form.vehicle_type,
-      slot_id: form.slot_id,
+      slot_id: parseInt(form.slot_id),
       payment_method: form.payment_method,
-      duration_type: form.duration_type,
-      duration_minutes: durMin,
-      duration_label: form.duration_type === 'known' ? form.duration_label : null,
-      amount,
-      payment_status: 'pending',
-      bill_generated: false,
+      amount: amount || null,
       entry_time: new Date().toISOString(),
     }
 
@@ -210,11 +207,11 @@ function WalkInManager() {
     await supabase
       .from('parking_slots')
       .update({ is_occupied: true, vehicle_id: form.vehicle_number.toUpperCase(), last_updated: new Date().toISOString() })
-      .eq('slot_id', form.slot_id)
+      .eq('slot_id', parseInt(form.slot_id))
 
     // Log entry
     await supabase.from('parking_logs').insert({
-      slot_id: form.slot_id,
+      slot_id: parseInt(form.slot_id),
       vehicle_number: form.vehicle_number.toUpperCase(),
       entry_time: new Date().toISOString(),
       type: 'walkin',
@@ -254,7 +251,6 @@ function WalkInManager() {
 
     await supabase.from('walk_in_sessions').update({
       exit_time: now,
-      duration_minutes: diffMin,
       amount: finalAmount,
       payment_status: 'paid',
     }).eq('session_id', session.session_id)
@@ -294,7 +290,6 @@ function WalkInManager() {
     }).select().single()
 
     if (error) { notify('Bill create failed: ' + error.message, 'err'); return null }
-    await supabase.from('walk_in_sessions').update({ bill_generated: true }).eq('session_id', session.session_id)
     return data
   }
 
@@ -345,8 +340,13 @@ function WalkInManager() {
             <div className="wi-field">
               <label>Select Slot *</label>
               <select name="slot_id" value={form.slot_id} onChange={handleChange} required>
-                <option value="">-- Available Slots --</option>
-                {avSlots.map(s => <option key={s.slot_id} value={s.slot_id}>{s.slot_id}</option>)}
+                <option value="">-- Select Slot --</option>
+                {avSlots.map(s => (
+                  <option key={s.slot_id} value={s.slot_id}>
+                    Slot {s.slot_id}{s.location ? ` — ${s.location}` : ''}
+                    {s.is_occupied ? ' [Occupied]' : s.is_booked ? ' [Booked]' : ' ✓'}
+                  </option>
+                ))}
               </select>
             </div>
             <div className="wi-field">

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../supabase/client'
-import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, CartesianGrid } from 'recharts'
+import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, CartesianGrid, LineChart, Line } from 'recharts'
 import { jsPDF } from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import * as XLSX from 'xlsx'
@@ -30,6 +30,7 @@ function getLast7Days() {
 
 function Accounting() {
   const [bills, setBills]   = useState([])
+  const [logs, setLogs]     = useState([])
   const [loading, setLoading] = useState(true)
   const [toast, setToast]   = useState('')
 
@@ -44,6 +45,14 @@ function Accounting() {
         .gte('created_at', monthStart)
         .order('created_at')
       if (data) setBills(data)
+
+      const { data: l } = await supabase
+        .from('parking_logs')
+        .select('*')
+        .gte('created_at', monthStart)
+        .order('entry_time')
+      if (l) setLogs(l)
+
       setLoading(false)
     }
     load()
@@ -68,13 +77,38 @@ function Accounting() {
 
   const totalMonthly = wRevMonth + bRevMonth
 
-  // Bar chart data — last 7 days
   const days = getLast7Days()
   const chartData = days.map(date => {
     const wi = sum(walkin.filter(b => b.created_at?.startsWith(date)), 'amount')
     const bo = sum(booked.filter(b => b.created_at?.startsWith(date)), 'amount')
     return { day: date.slice(5), walkIn: wi, booking: bo }
   })
+
+  const today = new Date().toISOString().split('T')[0]
+  const todayLogs = logs.filter(l => l.entry_time?.startsWith(today))
+
+  // Hourly usage chart
+  const hourlyData = Array.from({ length: 24 }, (_, h) => ({
+    hour: `${h.toString().padStart(2,'0')}:00`,
+    cars: todayLogs.filter(l => l.entry_time && new Date(l.entry_time).getHours() === h).length,
+  })).filter(h => h.cars > 0)
+
+  // Daily cars trend
+  const dailyData = days.map(date => ({
+    day: date.slice(5),
+    cars: logs.filter(l => l.entry_time?.startsWith(date)).length,
+  }))
+
+  // Revenue trend
+  const revData = days.map(date => ({
+    day: date.slice(5),
+    revenue: bills.filter(b => b.payment_status === 'paid' && b.created_at?.startsWith(date))
+      .reduce((s, b) => s + (b.amount || 0), 0),
+  }))
+
+  const peakHour = hourlyData.reduce((max, h) => h.cars > (max?.cars || 0) ? h : max, null)
+  const slotCount = {}; logs.forEach(l => { if (l.slot_id) slotCount[l.slot_id] = (slotCount[l.slot_id] || 0) + 1 })
+  const mostUsed = Object.entries(slotCount).sort((a,b) => b[1]-a[1])[0]
 
   // Download Monthly PDF Report
   const downloadPDF = () => {
@@ -237,6 +271,70 @@ function Accounting() {
             <FileSpreadsheet size={15} /> Download Excel
           </button>
         </div>
+      </div>
+
+      {/* ── Analytics Section ─────────────────────────────────── */}
+      <div className="ac-section-divider">
+        <h2 className="ac-section-heading">Usage Analytics</h2>
+      </div>
+
+      <div className="ac-analytics-stats">
+        {[{
+          label: 'Peak Hour Today', value: peakHour ? peakHour.hour : '—',
+          sub: peakHour ? `${peakHour.cars} cars` : 'No data yet',
+        }, {
+          label: 'Most Used Slot', value: mostUsed ? `Slot ${mostUsed[0]}` : '—',
+          sub: mostUsed ? `${mostUsed[1]} sessions` : 'No sessions',
+        }, {
+          label: 'Total Cars (Month)', value: logs.length, sub: 'this month',
+        }].map(c => (
+          <div className="ac-an-stat-card" key={c.label}>
+            <div className="ac-an-value">{c.value}</div>
+            <div className="ac-an-label">{c.label}</div>
+            <div className="ac-an-sub">{c.sub}</div>
+          </div>
+        ))}
+      </div>
+
+      {hourlyData.length > 0 && (
+        <div className="ac-panel">
+          <h3 className="ac-panel-title">Hourly Occupancy — Today</h3>
+          <ResponsiveContainer width="100%" height={220}>
+            <BarChart data={hourlyData} margin={{ top: 8, right: 20, left: 0, bottom: 5 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+              <XAxis dataKey="hour" tick={{ fontSize: 11 }} />
+              <YAxis allowDecimals={false} tick={{ fontSize: 11 }} />
+              <Tooltip />
+              <Bar dataKey="cars" name="Cars" fill="#3498db" radius={[4,4,0,0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      )}
+
+      <div className="ac-panel">
+        <h3 className="ac-panel-title">Daily Cars — Last 7 Days</h3>
+        <ResponsiveContainer width="100%" height={220}>
+          <LineChart data={dailyData} margin={{ top: 8, right: 20, left: 0, bottom: 5 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+            <XAxis dataKey="day" tick={{ fontSize: 11 }} />
+            <YAxis allowDecimals={false} tick={{ fontSize: 11 }} />
+            <Tooltip />
+            <Line type="monotone" dataKey="cars" name="Cars Parked" stroke="#2ecc71" strokeWidth={2.5} dot={{ r: 4 }} />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+
+      <div className="ac-panel">
+        <h3 className="ac-panel-title">Revenue Trend — Last 7 Days</h3>
+        <ResponsiveContainer width="100%" height={220}>
+          <LineChart data={revData} margin={{ top: 8, right: 20, left: 0, bottom: 5 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+            <XAxis dataKey="day" tick={{ fontSize: 11 }} />
+            <YAxis tick={{ fontSize: 11 }} />
+            <Tooltip formatter={(v) => `₹${v}`} />
+            <Line type="monotone" dataKey="revenue" name="Revenue" stroke="#9b59b6" strokeWidth={2.5} dot={{ r: 4 }} />
+          </LineChart>
+        </ResponsiveContainer>
       </div>
     </div>
   )

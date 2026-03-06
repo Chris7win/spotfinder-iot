@@ -7,22 +7,18 @@ import WalkInManager   from '../tabs/WalkInManager'
 import BookingsManager from '../tabs/BookingsManager'
 import BillCenter      from '../tabs/BillCenter'
 import Accounting      from '../tabs/Accounting'
-import Analytics       from '../tabs/Analytics'
 import DailyRecords    from '../tabs/DailyRecords'
-import PricingManager  from '../tabs/PricingManager'
 import Settings        from '../tabs/Settings'
 import './AdminDashboard.css'
 
 const TABS = [
   { id: 'overview',   label: 'Overview'       },
   { id: 'slots',      label: 'Slot Monitor'   },
-  { id: 'walkin',     label: 'Walk-in Manager'},
+  { id: 'walkin',     label: 'Walk-in'        },
   { id: 'bookings',   label: 'Bookings'       },
   { id: 'bills',      label: 'Bill Center'    },
   { id: 'accounting', label: 'Accounting'     },
-  { id: 'analytics',  label: 'Analytics'      },
   { id: 'records',    label: 'Daily Records'  },
-  { id: 'pricing',    label: 'Pricing'        },
   { id: 'settings',   label: 'Settings'       },
 ]
 
@@ -44,9 +40,7 @@ function AdminDashboard() {
       case 'bookings':   return <BookingsManager />
       case 'bills':      return <BillCenter />
       case 'accounting': return <Accounting />
-      case 'analytics':  return <Analytics />
       case 'records':    return <DailyRecords />
-      case 'pricing':    return <PricingManager />
       case 'settings':   return <Settings />
       default:           return <Overview />
     }

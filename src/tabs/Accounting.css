@@ -53,3 +53,38 @@
 .ac-btn:hover { opacity: 0.85; }
 .ac-btn.pdf   { background: #f5f0ff; color: #9b59b6; }
 .ac-btn.excel { background: #e8fff0; color: #27ae60; }
+
+/* ── Analytics Section ─────────────────── */
+.ac-section-divider {
+  border-top: 2px solid #f0f0f0;
+  padding-top: 0.5rem;
+  margin-top: 0.5rem;
+}
+.ac-section-heading {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #1a1a2e;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 0;
+}
+
+.ac-analytics-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+@media (max-width: 640px) { .ac-analytics-stats { grid-template-columns: 1fr; } }
+
+.ac-an-stat-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.07);
+  text-align: center;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.ac-an-value { font-size: 1.8rem; font-weight: 900; color: #1a1a2e; }
+.ac-an-label { font-size: 0.78rem; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
+.ac-an-sub   { font-size: 0.75rem; color: #bbb; }
+

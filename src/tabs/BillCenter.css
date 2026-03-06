@@ -90,9 +90,9 @@
   cursor: pointer; transition: opacity 0.2s;
 }
 .bc-btn:hover { opacity: 0.75; }
-.bc-btn.pdf  { background: #f5f0ff; color: #9b59b6; }
+.bc-btn.pdf  { background: #eef4fd; color: #3498db; }
 .bc-btn.wa   { background: #e8fff0; color: #27ae60; }
-.bc-btn.view { background: #eef4fd; color: #3498db; }
+.bc-btn.view { background: #f5f0ff; color: #9b59b6; }
 
 /* Detail Modal */
 .bc-modal-backdrop {
@@ -108,8 +108,11 @@
 .bc-modal-row { display: flex; justify-content: space-between; font-size: 0.88rem; color: #555; padding: 0.3rem 0; border-bottom: 1px solid #f5f5f5; }
 .bc-modal-row:last-child { border-bottom: none; }
 .bc-modal-row strong { color: #1a1a2e; }
+.bc-modal-actions {
+  display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;
+}
 .bc-modal-close {
   background: #f5f6fa; border: none; border-radius: 8px; padding: 0.6rem 1.5rem;
-  cursor: pointer; font-weight: 600; width: 100%; font-size: 0.9rem;
+  cursor: pointer; font-weight: 600; font-size: 0.9rem; margin-left: auto;
 }
 .bc-modal-close:hover { background: #e0e0e0; }

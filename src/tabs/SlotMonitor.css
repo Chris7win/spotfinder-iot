@@ -85,3 +85,224 @@
 .sm-btn.disable     { background: #fff0f0; color: #e74c3c; }
 
 .sm-empty { text-align: center; color: #aaa; padding: 2rem; }
+
+/* ── New additions ──────────────────────────────────────────── */
+
+/* MQTT status bar */
+.sm-mqtt-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+.sm-mqtt-bar.online  { background: #e8fdf2; color: #1abc9c; border: 1px solid #b2f0da; }
+.sm-mqtt-bar.offline { background: #fff0f0; color: #e74c3c; border: 1px solid #f5c6c6; }
+
+/* Inactive card */
+.sm-card-inactive {
+  background: #f7f7f7;
+  border-left-color: #ddd !important;
+  opacity: 0.65;
+}
+.sm-badge-inactive {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: #e0e0e0;
+  color: #999;
+}
+
+/* HW badge on active slot header */
+.sm-header-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.sm-hw-tag {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: #e8f4fd;
+  color: #2980b9;
+}
+
+/* Slot location label */
+.sm-location {
+  font-size: 11px;
+  color: #888;
+  margin-top: -4px;
+}
+
+/* ── Quick Stats ─────────────────────────── */
+.sm-quick-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+@media (max-width: 600px) { .sm-quick-stats { grid-template-columns: repeat(2, 1fr); } }
+
+.sm-qs-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 0.9rem 1rem;
+  text-align: center;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+  border-top: 3px solid #ccc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.78rem;
+  color: #666;
+}
+.sm-qs-card.available { border-top-color: #2ecc71; }
+.sm-qs-card.occupied  { border-top-color: #e74c3c; }
+.sm-qs-card.booked    { border-top-color: #f39c12; }
+.sm-qs-card.total     { border-top-color: #3498db; }
+.sm-qs-num {
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: #1a1a2e;
+}
+
+/* ── Toolbar ─────────────────────────────── */
+.sm-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+.sm-section-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  flex: 1;
+}
+.sm-view-toggle {
+  display: flex;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  overflow: hidden;
+}
+.sm-view-btn {
+  padding: 5px 14px;
+  border: none;
+  background: #fff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #888;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.sm-view-btn.active { background: #1a1a2e; color: #fff; }
+.sm-refresh-btn {
+  display: flex; align-items: center; gap: 5px;
+  padding: 5px 12px; border: 1px solid #e0e0e0; border-radius: 6px;
+  background: #fff; font-size: 0.8rem; font-weight: 600; color: #555;
+  cursor: pointer;
+}
+.sm-refresh-btn:hover { background: #f5f5f5; }
+
+/* ── Table View ──────────────────────────── */
+.sm-table-wrap { overflow-x: auto; margin-bottom: 1.5rem; }
+.sm-table {
+  width: 100%; border-collapse: collapse;
+  font-size: 0.84rem; background: #fff;
+  border-radius: 10px; overflow: hidden;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.07);
+}
+.sm-table th {
+  background: #1a1a2e; color: #fff;
+  padding: 10px 12px; text-align: left;
+  font-size: 0.75rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+.sm-table td { padding: 9px 12px; border-bottom: 1px solid #f0f0f0; vertical-align: middle; }
+.sm-table tr:last-child td { border-bottom: none; }
+.sm-row-inactive td { background: #fafafa; opacity: 0.65; }
+.sm-cell-slot { display: flex; align-items: center; gap: 6px; }
+.sm-slot-tag {
+  background: #1a1a2e; color: #fff;
+  width: 28px; height: 28px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 0.85rem;
+}
+.sm-hw-badge { font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; }
+.sm-hw-badge.hw { background: #e8f4fd; color: #2980b9; }
+.sm-hw-badge.manual { background: #f0f0f0; color: #888; }
+.sm-type-badge { font-size: 0.75rem; font-weight: 600; padding: 3px 8px; border-radius: 4px; }
+.sm-type-badge.hw { background: #e8f4fd; color: #2980b9; }
+.sm-type-badge.manual { background: #f0f0f0; color: #888; }
+.sm-loc-cell { font-size: 0.8rem; color: #666; }
+.sm-toggle-btn {
+  display: flex; align-items: center; gap: 4px;
+  padding: 4px 10px; border: none; border-radius: 6px;
+  font-size: 0.78rem; font-weight: 700; cursor: pointer;
+}
+.sm-toggle-btn.on  { background: #e8fff0; color: #27ae60; }
+.sm-toggle-btn.off { background: #f0f0f0; color: #999; }
+.sm-bool { font-size: 0.8rem; font-weight: 700; padding: 2px 8px; border-radius: 4px; }
+.sm-bool.yes { background: #fff0f0; color: #e74c3c; }
+.sm-bool.no  { background: #f0f0f0; color: #888; }
+.sm-updated { font-size: 0.78rem; color: #999; }
+.sm-tbl-actions { display: flex; gap: 5px; flex-wrap: wrap; }
+.sm-ta-btn {
+  display: flex; align-items: center; gap: 3px;
+  padding: 4px 9px; border: none; border-radius: 5px;
+  font-size: 0.73rem; font-weight: 600; cursor: pointer;
+  transition: opacity 0.15s;
+}
+.sm-ta-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.sm-ta-btn.free     { background: #e8fff0; color: #27ae60; }
+.sm-ta-btn.occupied { background: #fff0f0; color: #e74c3c; }
+.sm-ta-btn.disable  { background: #f5f5f5; color: #888; border: 1px solid #e0e0e0; }
+
+/* ── Config Section ──────────────────────── */
+.sm-config-section {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.07);
+  margin-top: 1.5rem;
+}
+.sm-config-header {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 1rem;
+}
+.sm-config-header h3 {
+  font-size: 0.95rem; font-weight: 700; color: #1a1a2e; margin: 0;
+}
+.sm-counter-row {
+  display: flex; align-items: center; gap: 1rem;
+  margin-bottom: 1rem; flex-wrap: wrap;
+}
+.sm-counter-btn {
+  width: 40px; height: 40px; border-radius: 50%;
+  border: 2px solid; font-size: 1.4rem; font-weight: 700;
+  background: #fff; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+.sm-counter-btn.minus { border-color: #e74c3c; color: #e74c3c; }
+.sm-counter-btn.plus  { border-color: #2ecc71; color: #2ecc71; }
+.sm-counter-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.sm-counter-display { display: flex; align-items: baseline; gap: 4px; }
+.sm-counter-value { font-size: 2rem; font-weight: 900; color: #1a1a2e; }
+.sm-counter-of { font-size: 1rem; color: #aaa; }
+.sm-counter-label { font-size: 0.85rem; color: #666; }
+.sm-config-note {
+  font-size: 0.8rem; color: #888; background: #fffbf0;
+  border: 1px solid #fde68a; border-radius: 6px;
+  padding: 8px 12px; line-height: 1.5;
+}
+

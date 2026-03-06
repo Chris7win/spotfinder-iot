@@ -40,3 +40,76 @@
 }
 .st-submit-btn:hover:not(:disabled) { background: #3498db; }
 .st-submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* ── New additions ─────────────────────────────────────────── */
+.st-info-grid { display: flex; flex-direction: column; gap: 0; }
+.st-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 0.88rem;
+  color: #555;
+}
+.st-info-row:last-child { border-bottom: none; }
+.st-info-row strong { color: #1a1a2e; font-weight: 600; }
+.st-info-url {
+  font-size: 0.75rem;
+  color: #3498db;
+  word-break: break-all;
+  text-align: right;
+  max-width: 260px;
+}
+
+/* Pricing Panel */
+.st-wrap { max-width: 640px; }
+.st-panel-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 0.35rem;
+}
+.st-sub { font-size: 0.8rem; color: #aaa; margin-bottom: 1rem; }
+.st-add-btn {
+  display: flex; align-items: center; gap: 5px;
+  padding: 5px 12px; background: #3498db; color: #fff;
+  border: none; border-radius: 6px; font-size: 0.82rem;
+  font-weight: 600; cursor: pointer;
+}
+.st-add-btn:hover { background: #2980b9; }
+.st-pricing-table { width: 100%; border-collapse: collapse; }
+.st-pricing-table th {
+  text-align: left; font-size: 0.73rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.5px;
+  color: #888; padding: 6px 8px; border-bottom: 2px solid #f0f0f0;
+}
+.st-pricing-table td { padding: 8px 8px; border-bottom: 1px solid #f5f5f5; vertical-align: middle; }
+.st-pricing-table tr:last-child td { border-bottom: none; }
+.st-dur-tag {
+  display: inline-block; background: #eef3ff; color: #3498db;
+  padding: 3px 10px; border-radius: 12px; font-size: 0.8rem; font-weight: 600;
+}
+.st-price-input-wrap { display: flex; align-items: center; gap: 4px; }
+.st-rupee { font-weight: 700; color: #555; }
+.st-price-input {
+  width: 80px; padding: 4px 8px; border: 1.5px solid #e0e0e0; border-radius: 6px;
+  font-size: 0.9rem; outline: none;
+}
+.st-price-input:focus { border-color: #3498db; }
+.st-updated { font-size: 0.75rem; color: #bbb; }
+.st-pricing-actions { display: flex; align-items: center; gap: 6px; }
+.st-save-btn {
+  padding: 4px 12px; background: #e8fff0; color: #27ae60;
+  border: none; border-radius: 5px; font-size: 0.8rem; font-weight: 600; cursor: pointer;
+}
+.st-save-btn:hover { background: #d0f5e0; }
+.st-save-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.st-del-btn {
+  padding: 4px 8px; background: #fff0f0; color: #e74c3c;
+  border: none; border-radius: 5px; cursor: pointer; display: flex; align-items: center;
+}
+.st-del-btn:hover { background: #ffe0e0; }
+.st-saved-badge {
+  font-size: 0.72rem; color: #27ae60; font-weight: 600; margin-left: 4px;
+}
+.st-empty { text-align: center; color: #aaa; padding: 1rem; font-size: 0.85rem; }
+

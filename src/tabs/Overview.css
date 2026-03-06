@@ -98,3 +98,37 @@
   font-weight: 600;
   text-transform: capitalize;
 }
+
+/* ── New additions ─────────────────────────────────────────── */
+.ov-stat-sub { font-size: 0.7rem; color: #bbb; margin-top: -2px; }
+
+.ov-hw-section {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed #eee;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.ov-hw-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #aaa;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 4px;
+}
+.ov-hw-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ov-hw-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+.ov-hw-live    { background: #e8fff0; color: #2ecc71; }
+.ov-hw-stale   { background: #fff8e8; color: #f39c12; }
+.ov-hw-offline { background: #fff0f0; color: #e74c3c; }

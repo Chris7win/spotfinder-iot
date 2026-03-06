@@ -36,8 +36,8 @@ function DailyRecords() {
   const totalWalkins = logs.filter(l => l.type === 'walkin').length
   const totalRevenue = bills.reduce((s, b) => s + (b.amount || 0), 0)
 
-  // Slot-wise breakdown
-  const slots = ['A1','A2','A3','A4']
+  // Slot-wise breakdown — slot_id is INTEGER in schema v2
+  const slots = [1, 2, 3, 4]
   const slotBreakdown = slots.map(sid => {
     const slotLogs = logs.filter(l => l.slot_id === sid)
     const totalHours = slotLogs.reduce((s, l) => s + ((l.duration_minutes || 0) / 60), 0)

@@ -1,0 +1,239 @@
+/* ── SlotConfig Tab ─────────────────────────────────────────────────── */
+
+.sc-wrap {
+  padding: 0 0 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.sc-loading {
+  text-align: center;
+  padding: 60px;
+  color: #aaa;
+  font-size: 15px;
+}
+
+/* Toast */
+.sc-toast {
+  position: fixed;
+  top: 70px;
+  right: 24px;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  z-index: 9999;
+  animation: scFadeIn 0.2s ease;
+}
+.sc-toast.ok  { background: #1abc9c; color: #fff; }
+.sc-toast.err { background: #e74c3c; color: #fff; }
+@keyframes scFadeIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+
+/* Panels */
+.sc-panel,
+.sc-counter-panel {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #e9ecef;
+  padding: 20px 24px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.05);
+}
+
+.sc-panel-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a2e;
+  margin: 0 0 16px;
+}
+
+/* Counter */
+.sc-counter-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 10px;
+}
+
+.sc-counter-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px solid;
+  font-size: 22px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity .15s, transform .1s;
+  line-height: 1;
+}
+.sc-counter-btn.plus  { border-color: #2ecc71; color: #2ecc71; background: #f0fdf4; }
+.sc-counter-btn.minus { border-color: #e74c3c; color: #e74c3c; background: #fdf0f0; }
+.sc-counter-btn:disabled { opacity: .35; cursor: not-allowed; }
+.sc-counter-btn:not(:disabled):hover { opacity: .8; transform: scale(1.06); }
+
+.sc-counter-display {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+.sc-counter-value {
+  font-size: 40px;
+  font-weight: 700;
+  color: #3498db;
+  line-height: 1;
+}
+.sc-counter-of {
+  font-size: 18px;
+  color: #aaa;
+}
+
+.sc-counter-sub {
+  font-size: 12px;
+  color: #888;
+  margin: 0;
+}
+
+/* Info note */
+.sc-info-note {
+  background: #fffbea;
+  border: 1px solid #f6d860;
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 13px;
+  color: #7a6000;
+  line-height: 1.6;
+}
+
+/* Table */
+.sc-table-wrap {
+  overflow-x: auto;
+}
+
+.sc-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.sc-table th {
+  text-align: left;
+  padding: 10px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  border-bottom: 2px solid #f0f0f0;
+  white-space: nowrap;
+}
+.sc-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #f5f5f5;
+  vertical-align: middle;
+}
+.sc-table tbody tr:hover { background: #fafafa; }
+.sc-row-inactive td { color: #bbb; }
+.sc-row-inactive .sc-slot-tag { background: #e0e0e0; color: #999; }
+
+/* Slot ID cell */
+.sc-slot-id-cell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.sc-slot-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: #3498db;
+  color: #fff;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+/* HW / Manual badge */
+.sc-hw-badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.sc-hw-badge.hw     { background: #e8f4fd; color: #2980b9; }
+.sc-hw-badge.manual { background: #f3f3f3; color: #888; }
+
+/* Type badge */
+.sc-type-badge {
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+.sc-type-badge.hw     { background: #eaf6fb; color: #2471a3; }
+.sc-type-badge.manual { background: #f3f3f3; color: #777; }
+
+/* Location */
+.sc-location {
+  font-size: 12px;
+  color: #555;
+}
+
+/* Active toggle */
+.sc-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: none;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity .15s;
+}
+.sc-toggle.on  { background: #e8fdf4; color: #1abc9c; }
+.sc-toggle.off { background: #f3f3f3; color: #aaa; }
+.sc-toggle:disabled { opacity: .4; cursor: not-allowed; }
+.sc-toggle:not(:disabled):hover { opacity: .75; }
+
+/* Bool cell */
+.sc-bool {
+  font-size: 12px;
+  font-weight: 600;
+}
+.sc-bool.yes { color: #e74c3c; }
+.sc-bool.no  { color: #2ecc71; }
+
+/* Last updated */
+.sc-updated {
+  font-size: 11px;
+  color: #aaa;
+  white-space: nowrap;
+}
+
+/* Actions */
+.sc-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.sc-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 9px;
+  border-radius: 6px;
+  border: none;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: opacity .15s;
+}
+.sc-btn:disabled       { opacity: .35; cursor: not-allowed; }
+.sc-btn:not(:disabled):hover { opacity: .78; }
+
+.sc-btn.free     { background: #e8fdf4; color: #1abc9c; }
+.sc-btn.occupied { background: #fdf0f0; color: #e74c3c; }
+.sc-btn.disable  { background: #f3f3f3; color: #888; }

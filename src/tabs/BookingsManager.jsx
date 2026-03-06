@@ -70,6 +70,7 @@ function BookingsManager() {
   const [qrError, setQrError]   = useState('')
   const [toast, setToast]       = useState('')
   const [loading, setLoading]   = useState(true)
+  const [activeSlots, setActiveSlots] = useState([])
 
   const notify = (msg) => { setToast(msg); setTimeout(() => setToast(''), 3000) }
 
@@ -84,7 +85,16 @@ function BookingsManager() {
     setLoading(false)
   }
 
-  useEffect(() => { load() }, [filters])
+  useEffect(() => { load() }, [filters]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    supabase
+      .from('parking_slots')
+      .select('slot_id, location')
+      .eq('is_active', true)
+      .order('slot_id')
+      .then(({ data }) => { if (data) setActiveSlots(data) })
+  }, [])
 
   const updateStatus = async (id, status) => {
     await supabase.from('bookings').update({ status }).eq('booking_id', id)
@@ -160,8 +170,15 @@ function BookingsManager() {
       <div className="bm-filters">
         <input type="date" className="bm-filter-input" value={filters.date}
           onChange={e => setFilters(p => ({ ...p, date: e.target.value }))} />
-        <input placeholder="Slot (A1...)" className="bm-filter-input" value={filters.slot}
-          onChange={e => setFilters(p => ({ ...p, slot: e.target.value }))} />
+        <select className="bm-filter-input" value={filters.slot}
+          onChange={e => setFilters(p => ({ ...p, slot: e.target.value }))}>
+          <option value="">All Slots</option>
+          {activeSlots.map(s => (
+            <option key={s.slot_id} value={s.slot_id}>
+              Slot {s.slot_id}{s.location ? ` — ${s.location}` : ''}
+            </option>
+          ))}
+        </select>
         <select className="bm-filter-input" value={filters.status}
           onChange={e => setFilters(p => ({ ...p, status: e.target.value }))}>
           <option value="">All Statuses</option>
