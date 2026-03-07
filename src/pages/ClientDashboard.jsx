@@ -9,7 +9,7 @@ import './ClientDashboard.css'
 const HW_IDS = [1, 2, 3, 4]
 
 // ❗ Set your Android/iOS app download link here:
-const APP_DOWNLOAD_URL = 'https://play.google.com/store/apps/details?id=YOUR_APP_ID'
+const APP_DOWNLOAD_URL = 'https://github.com/Chris7win/spotfinder-iot/releases/download/v1.0/app-release.apk'
 
 function ClientDashboard() {
   const [slots,       setSlots]       = useState([])
