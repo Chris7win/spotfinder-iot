@@ -64,3 +64,35 @@
 .pm-feedback.err { color: #e74c3c; }
 
 .pm-empty { text-align: center; color: #ccc; padding: 2rem; }
+
+/* ── Add Rate Inline Form ──────────────────────────────────── */
+.pm-add-form {
+  display: flex; align-items: flex-end; gap: 0.75rem; flex-wrap: wrap;
+  background: #f8faff; border: 1.5px dashed #c5d5f0; border-radius: 10px;
+  padding: 1rem 1.25rem; margin-bottom: 1.25rem;
+}
+.pm-add-field { display: flex; flex-direction: column; gap: 0.3rem; flex: 1; min-width: 140px; }
+.pm-add-field label {
+  font-size: 0.72rem; font-weight: 600; color: #555;
+  text-transform: uppercase; letter-spacing: 0.4px;
+}
+.pm-add-input {
+  padding: 0.5rem 0.75rem; border: 1.5px solid #d8dfe8; border-radius: 8px;
+  font-size: 0.9rem; outline: none; background: #fff; transition: border-color 0.2s;
+}
+.pm-add-input:focus { border-color: #3498db; }
+.pm-add-actions { display: flex; gap: 0.5rem; align-items: flex-end; padding-bottom: 1px; }
+.pm-add-save {
+  display: flex; align-items: center; gap: 0.3rem;
+  background: #27ae60; color: #fff; border: none; border-radius: 8px;
+  padding: 0.5rem 1rem; font-size: 0.82rem; font-weight: 600; cursor: pointer;
+  transition: background 0.2s;
+}
+.pm-add-save:hover { background: #219a52; }
+.pm-add-save:disabled { opacity: 0.5; cursor: not-allowed; }
+.pm-add-cancel {
+  display: flex; align-items: center; gap: 0.3rem;
+  background: #f0f0f5; color: #666; border: 1px solid #e0e0e0; border-radius: 8px;
+  padding: 0.5rem 0.85rem; font-size: 0.82rem; font-weight: 600; cursor: pointer;
+}
+.pm-add-cancel:hover { background: #e8e8e8; }

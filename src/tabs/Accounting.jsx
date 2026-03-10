@@ -4,8 +4,11 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, Cart
 import { jsPDF } from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import * as XLSX from 'xlsx'
-import { Download, FileSpreadsheet } from 'lucide-react'
+import { Download, FileSpreadsheet, IndianRupee, DollarSign, TrendingUp, BarChart3, Activity } from 'lucide-react'
+import PricingManager from './PricingManager'
 import './Accounting.css'
+
+const RUPEE = '\u20B9'
 
 function startOf(unit) {
   const d = new Date()
@@ -123,9 +126,9 @@ function Accounting() {
       startY: 40,
       head: [['Category', 'Today', 'This Week', 'This Month']],
       body: [
-        ['Walk-in Income', `₹${wRevDay}`, `₹${wRevWeek}`, `₹${wRevMonth}`],
-        ['App Booking Income', `₹${bRevDay}`, `₹${bRevWeek}`, `₹${bRevMonth}`],
-        ['Combined Total', `₹${wRevDay+bRevDay}`, `₹${wRevWeek+bRevWeek}`, `₹${totalMonthly}`],
+        ['Walk-in Income', `${RUPEE}${wRevDay}`, `${RUPEE}${wRevWeek}`, `${RUPEE}${wRevMonth}`],
+        ['App Booking Income', `${RUPEE}${bRevDay}`, `${RUPEE}${bRevWeek}`, `${RUPEE}${bRevMonth}`],
+        ['Combined Total', `${RUPEE}${wRevDay+bRevDay}`, `${RUPEE}${wRevWeek+bRevWeek}`, `${RUPEE}${totalMonthly}`],
       ],
       styles: { fontSize: 10 },
       headStyles: { fillColor: [26, 26, 46] },
@@ -142,7 +145,7 @@ function Accounting() {
         b.vehicle_number || '—',
         b.slot_id,
         b.duration_minutes || '—',
-        `₹${b.amount}`,
+        `${RUPEE}${b.amount}`,
         b.payment_method || '—',
         b.created_at ? new Date(b.created_at).toLocaleDateString('en-IN') : '—',
       ]),
@@ -163,7 +166,7 @@ function Accounting() {
       'Vehicle':        b.vehicle_number || '—',
       'Slot':           b.slot_id,
       'Duration (min)': b.duration_minutes || 0,
-      'Amount (₹)':     b.amount,
+      [`Amount (${RUPEE})`]:     b.amount,
       'Method':         b.payment_method || '—',
       'Date':           b.created_at ? new Date(b.created_at).toLocaleDateString('en-IN') : '',
     }))
@@ -180,6 +183,15 @@ function Accounting() {
     <div className="ac-wrap">
       {toast && <div className="ac-toast">{toast}</div>}
 
+      {/* ── Pricing Configuration ─────────────────────── */}
+      <section className="ac-section">
+        <h2 className="ac-section-label"><DollarSign size={14} /> Pricing Configuration</h2>
+        <PricingManager />
+      </section>
+
+      {/* ── Income Overview ────────────────────────────────── */}
+      <section className="ac-section">
+        <h2 className="ac-section-label"><TrendingUp size={14} /> Income Overview</h2>
       <div className="ac-row">
         {/* Walk-in Income Panel */}
         <div className="ac-panel">
@@ -187,25 +199,25 @@ function Accounting() {
           <div className="ac-period-grid">
             <div className="ac-period-card">
               <span className="ac-period-label">Today</span>
-              <span className="ac-period-value" style={{ color: '#f39c12' }}>₹{wRevDay}</span>
+              <span className="ac-period-value" style={{ color: '#f39c12' }}><IndianRupee size={16} style={{display:'inline',verticalAlign:'middle'}} />{wRevDay}</span>
             </div>
             <div className="ac-period-card">
               <span className="ac-period-label">This Week</span>
-              <span className="ac-period-value" style={{ color: '#f39c12' }}>₹{wRevWeek}</span>
+              <span className="ac-period-value" style={{ color: '#f39c12' }}><IndianRupee size={16} style={{display:'inline',verticalAlign:'middle'}} />{wRevWeek}</span>
             </div>
             <div className="ac-period-card">
               <span className="ac-period-label">This Month</span>
-              <span className="ac-period-value" style={{ color: '#f39c12' }}>₹{wRevMonth}</span>
+              <span className="ac-period-value" style={{ color: '#f39c12' }}><IndianRupee size={16} style={{display:'inline',verticalAlign:'middle'}} />{wRevMonth}</span>
             </div>
           </div>
           <div className="ac-method-row">
             <div className="ac-method-card">
               <span>Cash</span>
-              <strong>₹{wCash}</strong>
+              <strong><IndianRupee size={13} style={{display:'inline',verticalAlign:'middle'}} />{wCash}</strong>
             </div>
             <div className="ac-method-card">
               <span>UPI</span>
-              <strong>₹{wUPI}</strong>
+              <strong><IndianRupee size={13} style={{display:'inline',verticalAlign:'middle'}} />{wUPI}</strong>
             </div>
           </div>
         </div>
@@ -216,21 +228,21 @@ function Accounting() {
           <div className="ac-period-grid">
             <div className="ac-period-card">
               <span className="ac-period-label">Today</span>
-              <span className="ac-period-value" style={{ color: '#3498db' }}>₹{bRevDay}</span>
+              <span className="ac-period-value" style={{ color: '#3498db' }}><IndianRupee size={16} style={{display:'inline',verticalAlign:'middle'}} />{bRevDay}</span>
             </div>
             <div className="ac-period-card">
               <span className="ac-period-label">This Week</span>
-              <span className="ac-period-value" style={{ color: '#3498db' }}>₹{bRevWeek}</span>
+              <span className="ac-period-value" style={{ color: '#3498db' }}><IndianRupee size={16} style={{display:'inline',verticalAlign:'middle'}} />{bRevWeek}</span>
             </div>
             <div className="ac-period-card">
               <span className="ac-period-label">This Month</span>
-              <span className="ac-period-value" style={{ color: '#3498db' }}>₹{bRevMonth}</span>
+              <span className="ac-period-value" style={{ color: '#3498db' }}><IndianRupee size={16} style={{display:'inline',verticalAlign:'middle'}} />{bRevMonth}</span>
             </div>
           </div>
           <div className="ac-method-row">
             <div className="ac-method-card">
               <span>App Pay</span>
-              <strong>₹{bRevMonth}</strong>
+              <strong><IndianRupee size={13} style={{display:'inline',verticalAlign:'middle'}} />{bRevMonth}</strong>
             </div>
             <div className="ac-method-card">
               <span>Bookings</span>
@@ -240,15 +252,19 @@ function Accounting() {
         </div>
       </div>
 
-      {/* Bar Chart */}
+      </section>
+
+      {/* ── Income Charts ──────────────────────────────────── */}
+      <section className="ac-section">
+        <h2 className="ac-section-label"><BarChart3 size={14} /> Income Charts</h2>
       <div className="ac-panel">
-        <h3 className="ac-panel-title">Walk-in vs Booking — Daily Income (This Week)</h3>
+        <h3 className="ac-panel-title">Walk-in vs Booking {"\u2014"} Daily Income (This Week)</h3>
         <ResponsiveContainer width="100%" height={260}>
           <BarChart data={chartData} margin={{ top: 10, right: 20, left: 0, bottom: 5 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
             <XAxis dataKey="day" tick={{ fontSize: 12 }} />
             <YAxis tick={{ fontSize: 12 }} />
-            <Tooltip formatter={(v) => `₹${v}`} />
+            <Tooltip formatter={(v) => `${RUPEE}${v}`} />
             <Legend />
             <Bar dataKey="walkIn"  name="Walk-in"  fill="#f39c12" radius={[4,4,0,0]} />
             <Bar dataKey="booking" name="Booking"  fill="#3498db" radius={[4,4,0,0]} />
@@ -256,12 +272,16 @@ function Accounting() {
         </ResponsiveContainer>
       </div>
 
-      {/* Total Summary */}
+      </section>
+
+      {/* ── Revenue Summary ────────────────────────────────── */}
+      <section className="ac-section">
+        <h2 className="ac-section-label"><Download size={14} /> Revenue Summary & Export</h2>
       <div className="ac-panel ac-total-panel">
         <div className="ac-total-left">
           <div className="ac-total-label">Combined Monthly Revenue</div>
-          <div className="ac-total-value">₹{totalMonthly}</div>
-          <div className="ac-total-sub">Walk-in ₹{wRevMonth} + Bookings ₹{bRevMonth}</div>
+          <div className="ac-total-value"><IndianRupee size={28} style={{display:'inline',verticalAlign:'middle'}} />{totalMonthly}</div>
+          <div className="ac-total-sub">Walk-in {RUPEE}{wRevMonth} + Bookings {RUPEE}{bRevMonth}</div>
         </div>
         <div className="ac-total-actions">
           <button className="ac-btn pdf" onClick={downloadPDF}>
@@ -273,10 +293,11 @@ function Accounting() {
         </div>
       </div>
 
-      {/* ── Analytics Section ─────────────────────────────────── */}
-      <div className="ac-section-divider">
-        <h2 className="ac-section-heading">Usage Analytics</h2>
-      </div>
+      </section>
+
+      {/* ── Usage Analytics ────────────────────────────────── */}
+      <section className="ac-section">
+        <h2 className="ac-section-label"><Activity size={14} /> Usage Analytics</h2>
 
       <div className="ac-analytics-stats">
         {[{
@@ -298,7 +319,7 @@ function Accounting() {
 
       {hourlyData.length > 0 && (
         <div className="ac-panel">
-          <h3 className="ac-panel-title">Hourly Occupancy — Today</h3>
+          <h3 className="ac-panel-title">Hourly Occupancy {"\u2014"} Today</h3>
           <ResponsiveContainer width="100%" height={220}>
             <BarChart data={hourlyData} margin={{ top: 8, right: 20, left: 0, bottom: 5 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -312,7 +333,7 @@ function Accounting() {
       )}
 
       <div className="ac-panel">
-        <h3 className="ac-panel-title">Daily Cars — Last 7 Days</h3>
+        <h3 className="ac-panel-title">Daily Cars {"\u2014"} Last 7 Days</h3>
         <ResponsiveContainer width="100%" height={220}>
           <LineChart data={dailyData} margin={{ top: 8, right: 20, left: 0, bottom: 5 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -325,17 +346,18 @@ function Accounting() {
       </div>
 
       <div className="ac-panel">
-        <h3 className="ac-panel-title">Revenue Trend — Last 7 Days</h3>
+        <h3 className="ac-panel-title">Revenue Trend {"\u2014"} Last 7 Days</h3>
         <ResponsiveContainer width="100%" height={220}>
           <LineChart data={revData} margin={{ top: 8, right: 20, left: 0, bottom: 5 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
             <XAxis dataKey="day" tick={{ fontSize: 11 }} />
             <YAxis tick={{ fontSize: 11 }} />
-            <Tooltip formatter={(v) => `₹${v}`} />
+            <Tooltip formatter={(v) => `${RUPEE}${v}`} />
             <Line type="monotone" dataKey="revenue" name="Revenue" stroke="#9b59b6" strokeWidth={2.5} dot={{ r: 4 }} />
           </LineChart>
         </ResponsiveContainer>
       </div>
+      </section>
     </div>
   )
 }

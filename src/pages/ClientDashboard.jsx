@@ -4,12 +4,24 @@ import { useMqttSlots } from '../hooks/useMqttSlots'
 import Navbar from '../components/Navbar'
 import SlotGrid from '../components/SlotGrid'
 import LoginModal from '../components/LoginModal'
+import { IndianRupee } from 'lucide-react'
 import './ClientDashboard.css'
 
+const RUPEE = '\u20B9'
 const HW_IDS = [1, 2, 3, 4]
 
 // ❗ Set your Android/iOS app download link here:
 const APP_DOWNLOAD_URL = 'https://github.com/Chris7win/spotfinder-iot/releases/download/v1.0/app-release.apk'
+
+// Rotating taglines shown in the hero section
+const TAGLINES = [
+  'Park Smarter, Not Harder.',
+  'Your Spot Awaits — Zero Hassle.',
+  'Drive In. Chill Out. We Got Your Spot.',
+  'Smart Campus. Smarter Parking.',
+  'Why Circle the Lot? We\'ll Save You a Spot.',
+]
+
 
 function ClientDashboard() {
   const [slots,       setSlots]       = useState([])
@@ -69,6 +81,13 @@ function ClientDashboard() {
   const activeCount = slots.length
   const available   = mergedSlots.filter(s => !s.is_occupied && !s.is_booked).length
 
+  // Pick a tagline based on the current minute so it rotates naturally
+  const tagline = TAGLINES[new Date().getMinutes() % TAGLINES.length]
+
+  // Time-aware greeting
+  const hour = new Date().getHours()
+  const greeting = hour < 12 ? 'Good Morning' : hour < 17 ? 'Good Afternoon' : 'Good Evening'
+
   return (
     <div className="client-page">
       <Navbar mode="client" onLockClick={() => setShowLogin(true)} />
@@ -79,40 +98,55 @@ function ClientDashboard() {
           <div className="hero-badge">
             {connected ? '● Live Parking Status' : '○ Parking Status'}
           </div>
-          <h1 className="hero-title">Find Your Parking Spot</h1>
-          <p className="hero-sub">SpotFinder IOT Smart Parking – College Campus</p>
-          <div className="hero-counter">
-            <span className="hero-count">{loading ? '...' : available}</span>
-            <span className="hero-count-label">Available out of {activeCount} slots</span>
+          <p className="hero-greeting">{greeting}! Welcome to</p>
+          <h1 className="hero-title">SpotFinder <span className="hero-title-accent">IOT</span></h1>
+          <p className="hero-tagline">{tagline}</p>
+          <p className="hero-sub">Smart Campus Parking — Powered by IoT Sensors</p>
+
+          <div className="hero-counter-wrap">
+            <div className="hero-counter">
+              <span className="hero-count">{loading ? '...' : available}</span>
+              <span className="hero-count-label">Spots Open</span>
+            </div>
+            <div className="hero-counter-divider" />
+            <div className="hero-counter">
+              <span className="hero-count hero-count-total">{activeCount}</span>
+              <span className="hero-count-label">Total Slots</span>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Slot Grid */}
       <section className="client-section">
-        <h2 className="section-title">Parking Slots</h2>
+        <h2 className="section-title">Live Parking Slots</h2>
+        <p className="section-desc">Tap-free visibility — see which spots are open right now.</p>
         {loading ? (
-          <div className="client-loading">Loading slots...</div>
+          <div className="client-loading">
+            <div className="client-spinner" />
+            Fetching live data...
+          </div>
         ) : (
           <SlotGrid slots={mergedSlots} />
         )}
       </section>
 
       {/* Pricing */}
-      <section className="client-section">
+      <section className="client-section client-section-alt">
         <h2 className="section-title">Parking Rates</h2>
+        <p className="section-desc">Transparent pricing — no hidden charges, ever.</p>
         {pricing.length > 0 ? (
           <div className="pricing-grid">
             {pricing.map(p => (
               <div className="pricing-card" key={p.duration_label}>
                 <div className="pricing-duration">{p.duration_label}</div>
-                <div className="pricing-amount">₹{p.price}</div>
+                <div className="pricing-amount">{RUPEE}{p.price}</div>
               </div>
             ))}
           </div>
         ) : (
           <div className="pricing-grid">
-            {[['30 min','₹15'],['1 Hour','₹25'],['2 Hours','₹45'],['4 Hours','₹80']].map(([d,a]) => (
+            {[['30 min',RUPEE+'15'],['1 Hour',RUPEE+'25'],['2 Hours',RUPEE+'45'],['4 Hours',RUPEE+'80']].map(([d,a]) => (
               <div className="pricing-card" key={d}>
                 <div className="pricing-duration">{d}</div>
                 <div className="pricing-amount">{a}</div>
@@ -124,11 +158,18 @@ function ClientDashboard() {
 
       {/* CTA */}
       <section className="client-cta">
-        <h3>Ready to park?</h3>
-        <p>Download SpotFinder App to book your slot instantly</p>
+        <h3>Ready to Park Like a Pro?</h3>
+        <p>Download the SpotFinder app — book, pay and park in under 30 seconds.</p>
         <button className="cta-btn" onClick={() => window.open(APP_DOWNLOAD_URL, '_blank')}>
-          Download SpotFinder App
+          Get SpotFinder App
         </button>
+        <span className="cta-footnote">Available on Android · Free to use</span>
+      </section>
+
+      {/* Motivation Strip */}
+      <section className="client-motivation">
+        <p>"A smooth journey starts with a great parking spot."</p>
+        <p className="motivation-sub">Built with purpose for our campus community.</p>
       </section>
 
       {/* Footer */}

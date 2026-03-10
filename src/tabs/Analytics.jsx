@@ -4,7 +4,10 @@ import {
   BarChart, Bar, LineChart, Line, XAxis, YAxis, Tooltip,
   Legend, ResponsiveContainer, CartesianGrid,
 } from 'recharts'
+import { IndianRupee } from 'lucide-react'
 import './Analytics.css'
+
+const RUPEE = '\u20B9'
 
 function getLast7Days() {
   const days = []
@@ -99,7 +102,7 @@ function Analytics() {
 
       {/* Hourly Bar - today */}
       <div className="an-chart-panel">
-        <h3 className="an-chart-title">Hourly Occupancy — Today</h3>
+        <h3 className="an-chart-title">Hourly Occupancy {"\u2014"} Today</h3>
         {hourlyData.length === 0 ? (
           <div className="an-empty">No parking logs for today yet.</div>
         ) : (
@@ -117,7 +120,7 @@ function Analytics() {
 
       {/* Daily Trend Line */}
       <div className="an-chart-panel">
-        <h3 className="an-chart-title">Daily Cars — Last 7 Days</h3>
+        <h3 className="an-chart-title">Daily Cars {"\u2014"} Last 7 Days</h3>
         <ResponsiveContainer width="100%" height={220}>
           <LineChart data={dailyData} margin={{ top: 8, right: 20, left: 0, bottom: 5 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -131,13 +134,13 @@ function Analytics() {
 
       {/* Monthly Revenue Trend */}
       <div className="an-chart-panel">
-        <h3 className="an-chart-title">Revenue Trend — Last 7 Days (₹)</h3>
+        <h3 className="an-chart-title">Revenue Trend {"\u2014"} Last 7 Days ({RUPEE})</h3>
         <ResponsiveContainer width="100%" height={220}>
           <LineChart data={monthlyRevData} margin={{ top: 8, right: 20, left: 0, bottom: 5 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
             <XAxis dataKey="day" tick={{ fontSize: 11 }} />
             <YAxis tick={{ fontSize: 11 }} />
-            <Tooltip formatter={(v) => `₹${v}`} />
+            <Tooltip formatter={(v) => `${RUPEE}${v}`} />
             <Line type="monotone" dataKey="revenue" name="Revenue" stroke="#9b59b6" strokeWidth={2.5} dot={{ r: 4 }} />
           </LineChart>
         </ResponsiveContainer>

@@ -1,13 +1,19 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../supabase/client'
-import { Save, Plus, Trash2 } from 'lucide-react'
+import { Save, Plus, Trash2, X, IndianRupee } from 'lucide-react'
 import './PricingManager.css'
+
+const RUPEE = '\u20B9'
 
 function PricingManager() {
   const [rows, setRows]       = useState([])
   const [loading, setLoading] = useState(true)
   const [savingId, setSavingId] = useState(null)
-  const [feedback, setFeedback] = useState({}) // { [duration_label]: { msg, type } }
+  const [feedback, setFeedback] = useState({})
+  const [showAdd, setShowAdd]   = useState(false)
+  const [newLabel, setNewLabel] = useState('')
+  const [newPrice, setNewPrice] = useState('')
+  const [addSaving, setAddSaving] = useState(false)
 
   const load = async () => {
     const { data } = await supabase.from('pricing').select('*').order('price')
@@ -41,12 +47,19 @@ function PricingManager() {
     load()
   }
 
-  const addRow = async () => {
-    const label = prompt('Enter duration label (e.g. "3 Hours"):')
-    if (!label) return
-    const price = parseFloat(prompt('Enter price (₹):'))
-    if (isNaN(price)) return
-    await supabase.from('pricing').insert({ duration_label: label, price, updated_at: new Date().toISOString() })
+  const addRow = async (e) => {
+    e.preventDefault()
+    if (!newLabel.trim() || !newPrice || isNaN(parseFloat(newPrice))) return
+    setAddSaving(true)
+    await supabase.from('pricing').insert({
+      duration_label: newLabel.trim(),
+      price: parseFloat(newPrice),
+      updated_at: new Date().toISOString(),
+    })
+    setNewLabel('')
+    setNewPrice('')
+    setShowAdd(false)
+    setAddSaving(false)
     load()
   }
 
@@ -61,15 +74,51 @@ function PricingManager() {
       <div className="pm-panel">
         <div className="pm-header">
           <h3 className="pm-title">Parking Pricing</h3>
-          <button className="pm-add-btn" onClick={addRow}>
+          <button className="pm-add-btn" onClick={() => setShowAdd(true)}>
             <Plus size={15} /> Add Rate
           </button>
         </div>
         <p className="pm-sub">Edit prices inline and save per row. Changes reflect instantly on the client dashboard.</p>
 
+        {showAdd && (
+          <form className="pm-add-form" onSubmit={addRow}>
+            <div className="pm-add-field">
+              <label>Duration Label</label>
+              <input
+                className="pm-add-input"
+                placeholder='e.g. "3 Hours"'
+                value={newLabel}
+                onChange={e => setNewLabel(e.target.value)}
+                autoFocus
+                required
+              />
+            </div>
+            <div className="pm-add-field">
+              <label>Price ({RUPEE})</label>
+              <input
+                className="pm-add-input"
+                type="number"
+                min="0"
+                placeholder="0"
+                value={newPrice}
+                onChange={e => setNewPrice(e.target.value)}
+                required
+              />
+            </div>
+            <div className="pm-add-actions">
+              <button type="submit" className="pm-add-save" disabled={addSaving}>
+                <Plus size={13} /> {addSaving ? 'Adding...' : 'Add Rate'}
+              </button>
+              <button type="button" className="pm-add-cancel" onClick={() => { setShowAdd(false); setNewLabel(''); setNewPrice('') }}>
+                <X size={13} /> Cancel
+              </button>
+            </div>
+          </form>
+        )}
+
         <table className="pm-table">
           <thead>
-            <tr><th>Duration</th><th>Price (₹)</th><th>Last Updated</th><th>Actions</th></tr>
+            <tr><th>Duration</th><th>Price ({RUPEE})</th><th>Last Updated</th><th>Actions</th></tr>
           </thead>
           <tbody>
             {rows.map(row => (
@@ -77,7 +126,7 @@ function PricingManager() {
                 <td><span className="pm-dur-tag">{row.duration_label}</span></td>
                 <td>
                   <div className="pm-price-input-wrap">
-                    <span className="pm-rupee">₹</span>
+                    <span className="pm-rupee"><IndianRupee size={13} style={{display:'inline',verticalAlign:'middle'}} /></span>
                     <input
                       className="pm-price-input"
                       type="number"

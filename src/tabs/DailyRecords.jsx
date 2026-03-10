@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../supabase/client'
+import { Calendar, BarChart3, ClipboardList, IndianRupee } from 'lucide-react'
 import './DailyRecords.css'
+
+const RUPEE = '\u20B9'
 
 function DailyRecords() {
   const [date, setDate]     = useState(new Date().toISOString().split('T')[0])
@@ -48,6 +51,10 @@ function DailyRecords() {
 
   return (
     <div className="dr-wrap">
+
+      {/* ── Date Selection ─────────────────────────────────── */}
+      <section className="dr-section">
+        <h2 className="dr-section-label"><Calendar size={14} /> Date Selection</h2>
       <div className="dr-date-bar">
         <label className="dr-date-label">Select Date</label>
         <input
@@ -58,18 +65,23 @@ function DailyRecords() {
           onChange={e => setDate(e.target.value)}
         />
       </div>
+      </section>
 
       {loading ? (
         <div className="dr-loading">Loading records for {date}...</div>
       ) : (
         <>
+          {/* ── Daily Summary ──────────────────────────────────── */}
+          <section className="dr-section">
+            <h2 className="dr-section-label"><BarChart3 size={14} /> Daily Summary</h2>
+
           {/* Summary Cards */}
           <div className="dr-summary-grid">
             {[
               { label: 'Total Cars',  value: totalCars,         color: '#3498db' },
               { label: 'Bookings',    value: totalBookings,      color: '#9b59b6' },
               { label: 'Walk-ins',    value: totalWalkins,       color: '#f39c12' },
-              { label: 'Revenue',     value: `₹${totalRevenue}`, color: '#2ecc71' },
+              { label: 'Revenue',     value: `${RUPEE}${totalRevenue}`, color: '#2ecc71' },
             ].map(c => (
               <div className="dr-summary-card" key={c.label} style={{ borderTopColor: c.color }}>
                 <div className="dr-summary-value" style={{ color: c.color }}>{c.value}</div>
@@ -77,6 +89,11 @@ function DailyRecords() {
               </div>
             ))}
           </div>
+          </section>
+
+          {/* ── Activity Records ──────────────────────────────── */}
+          <section className="dr-section">
+            <h2 className="dr-section-label"><ClipboardList size={14} /> Activity Records</h2>
 
           {/* Slot Breakdown */}
           <div className="dr-panel">
@@ -91,7 +108,7 @@ function DailyRecords() {
                     <td><span className="dr-slot-tag">{s.slot}</span></td>
                     <td>{s.sessions}</td>
                     <td>{s.hours} hrs</td>
-                    <td className="dr-rev">₹{s.revenue}</td>
+                    <td className="dr-rev">{RUPEE}{s.revenue}</td>
                   </tr>
                 ))}
               </tbody>
@@ -130,6 +147,7 @@ function DailyRecords() {
               </div>
             )}
           </div>
+          </section>
         </>
       )}
     </div>

@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../supabase/client'
 import { jsPDF } from 'jspdf'
-import { UserPlus, MessageCircle, Printer, StopCircle } from 'lucide-react'
+import { UserPlus, MessageCircle, Printer, StopCircle, ClipboardList, IndianRupee } from 'lucide-react'
 import './WalkInManager.css'
+
+const RUPEE = '\u20B9'
 
 // ─── PDF Generator ─────────────────────────────────────────────────────────
 function generateBillPDF(bill) {
@@ -63,7 +65,7 @@ function sendWhatsApp(bill) {
 🕐 Entry: ${bill.entry_time}
 🕑 Exit: ${bill.exit_time}
 
-💰 Amount: ₹${bill.amount}
+💰 Amount: ${RUPEE}${bill.amount}
 💳 Payment: ${bill.payment_method}
 ✅ Status: Paid
 
@@ -119,7 +121,7 @@ function SessionRow({ session, pricing, onEnd, onBill, onPrint, onWA }) {
       <td>{new Date(session.entry_time).toLocaleTimeString('en-IN')}</td>
       <td className="wi-timer">{fmtTimer(elapsed)}</td>
       <td>{isOpen ? 'Open (live)' : fmtDuration(elapsed)}</td>
-      <td className="wi-amount">₹{amount}</td>
+      <td className="wi-amount"><IndianRupee size={13} style={{display:'inline',verticalAlign:'middle'}} />{amount}</td>
       <td>{session.payment_method}</td>
       <td>
         <div className="wi-actions">
@@ -314,6 +316,10 @@ function WalkInManager() {
     <div className="wi-wrap">
       {toast.msg && <div className={`wi-toast ${toast.type}`}>{toast.msg}</div>}
 
+      {/* ── New Walk-in Entry ─────────────────────────────── */}
+      <section className="wi-section">
+        <h2 className="wi-section-label"><UserPlus size={14} /> New Walk-in Entry</h2>
+
       {/* New Walk-in Form */}
       <div className="wi-panel">
         <h3 className="wi-panel-title"><UserPlus size={16} /> New Walk-in Entry</h3>
@@ -381,7 +387,7 @@ function WalkInManager() {
               </select>
               {form.duration_type === 'known' && (
                 <span className="wi-price-preview">
-                  ₹{getPriceForDuration(form.duration_label)}
+                  {RUPEE}{getPriceForDuration(form.duration_label)}
                 </span>
               )}
             </div>
@@ -392,6 +398,11 @@ function WalkInManager() {
           </button>
         </form>
       </div>
+      </section>
+
+      {/* ── Active Sessions ───────────────────────────────── */}
+      <section className="wi-section">
+        <h2 className="wi-section-label"><ClipboardList size={14} /> Active Sessions</h2>
 
       {/* Active Sessions */}
       <div className="wi-panel">
@@ -425,6 +436,7 @@ function WalkInManager() {
           </div>
         )}
       </div>
+      </section>
     </div>
   )
 }

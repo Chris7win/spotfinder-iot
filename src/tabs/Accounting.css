@@ -1,5 +1,6 @@
-.ac-wrap { display: flex; flex-direction: column; gap: 1.5rem; position: relative; }
+﻿.ac-wrap { display: flex; flex-direction: column; gap: 1.5rem; position: relative; }
 .ac-loading { text-align: center; color: #aaa; padding: 2rem; }
+.ac-empty { text-align: center; color: #aaa; padding: 1.5rem; font-size: 0.85rem; }
 
 .ac-toast {
   position: fixed; bottom: 2rem; right: 2rem; background: #1a1a2e; color: #fff;
@@ -7,19 +8,103 @@
   box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
 
-.ac-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+/* ── Section Labels ─────────────────────────────────────────── */
+.ac-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.ac-section-label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: #3498db;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #eaf2fb;
+  margin: 0;
+}
+
+/* ── Panel ──────────────────────────────────────────────────── */
+.ac-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
 @media (max-width: 640px) { .ac-row { grid-template-columns: 1fr; } }
 
 .ac-panel {
   background: #fff; border-radius: 14px; padding: 1.5rem;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+  box-shadow: 0 1px 6px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+  border: 1px solid #f0f0f5;
+}
+
+.ac-panel-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
 }
 
 .ac-panel-title {
   font-size: 0.95rem; font-weight: 700; color: #1a1a2e;
-  margin-bottom: 1.25rem; text-transform: uppercase; letter-spacing: 0.5px;
+  margin-bottom: 0.25rem; text-transform: uppercase; letter-spacing: 0.5px;
 }
 
+.ac-panel-desc {
+  font-size: 0.82rem;
+  color: #888;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ── Pricing Table ─────────────────────────────────────────── */
+.ac-add-btn {
+  display: flex; align-items: center; gap: 5px;
+  padding: 7px 16px; background: #3498db; color: #fff;
+  border: none; border-radius: 8px; font-size: 0.82rem;
+  font-weight: 600; cursor: pointer; transition: background 0.2s;
+  white-space: nowrap; flex-shrink: 0;
+}
+.ac-add-btn:hover { background: #2980b9; }
+
+.ac-pricing-table { width: 100%; border-collapse: collapse; margin-top: 0.75rem; }
+.ac-pricing-table th {
+  text-align: left; font-size: 0.73rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.5px;
+  color: #888; padding: 8px 10px; border-bottom: 2px solid #f0f0f0;
+}
+.ac-pricing-table td { padding: 10px 10px; border-bottom: 1px solid #f5f5f5; vertical-align: middle; }
+.ac-pricing-table tr:last-child td { border-bottom: none; }
+
+.ac-dur-tag {
+  display: inline-block; background: #eef3ff; color: #3498db;
+  padding: 4px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: 600;
+}
+.ac-price-input-wrap { display: flex; align-items: center; gap: 4px; }
+.ac-rupee { font-weight: 700; color: #555; }
+.ac-price-input {
+  width: 80px; padding: 5px 8px; border: 1.5px solid #e0e0e0; border-radius: 8px;
+  font-size: 0.9rem; outline: none; background: #fafbfc; transition: border-color 0.2s;
+}
+.ac-price-input:focus { border-color: #3498db; background: #fff; }
+.ac-updated-cell { font-size: 0.75rem; color: #bbb; }
+.ac-pricing-actions { display: flex; align-items: center; gap: 6px; }
+.ac-pricing-save {
+  display: flex; align-items: center; gap: 4px;
+  padding: 5px 14px; background: #e8fff0; color: #27ae60;
+  border: none; border-radius: 7px; font-size: 0.8rem; font-weight: 600; cursor: pointer;
+}
+.ac-pricing-save:hover { background: #d0f5e0; }
+.ac-pricing-save:disabled { opacity: 0.5; cursor: not-allowed; }
+.ac-pricing-del {
+  padding: 5px 8px; background: #fff0f0; color: #e74c3c;
+  border: none; border-radius: 7px; cursor: pointer; display: flex; align-items: center;
+}
+.ac-pricing-del:hover { background: #ffe0e0; }
+.ac-saved-badge { font-size: 0.72rem; color: #27ae60; font-weight: 600; margin-left: 4px; }
+
+/* ── Income Cards ──────────────────────────────────────────── */
 .ac-period-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-bottom: 1rem; }
 
 .ac-period-card {
@@ -54,21 +139,7 @@
 .ac-btn.pdf   { background: #f5f0ff; color: #9b59b6; }
 .ac-btn.excel { background: #e8fff0; color: #27ae60; }
 
-/* ── Analytics Section ─────────────────── */
-.ac-section-divider {
-  border-top: 2px solid #f0f0f0;
-  padding-top: 0.5rem;
-  margin-top: 0.5rem;
-}
-.ac-section-heading {
-  font-size: 1rem;
-  font-weight: 800;
-  color: #1a1a2e;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin: 0;
-}
-
+/* ── Analytics Stats ───────────────────────────────────────── */
 .ac-analytics-stats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -81,6 +152,7 @@
   border-radius: 12px;
   padding: 1.25rem;
   box-shadow: 0 1px 8px rgba(0,0,0,0.07);
+  border: 1px solid #f0f0f5;
   text-align: center;
   display: flex; flex-direction: column; gap: 4px;
 }
@@ -88,3 +160,75 @@
 .ac-an-label { font-size: 0.78rem; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
 .ac-an-sub   { font-size: 0.75rem; color: #bbb; }
 
+/* ── Add Rate Modal ────────────────────────────────────────── */
+.ac-modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(4px); display: flex; align-items: center;
+  justify-content: center; z-index: 10000; padding: 1.5rem;
+}
+
+.ac-modal {
+  background: #fff; border-radius: 18px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  max-width: 420px; width: 100%; padding: 2rem;
+  position: relative; animation: ac-modal-in 0.25s ease;
+}
+
+@keyframes ac-modal-in {
+  from { opacity: 0; transform: scale(0.92) translateY(12px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.ac-modal-close {
+  position: absolute; top: 14px; right: 14px;
+  background: #f5f5f5; border: none; border-radius: 50%;
+  width: 32px; height: 32px; display: flex; align-items: center;
+  justify-content: center; cursor: pointer; color: #666;
+}
+.ac-modal-close:hover { background: #e8e8e8; }
+
+.ac-modal-title {
+  font-size: 1.1rem; font-weight: 800; color: #1a1a2e;
+  margin: 0 0 0.25rem; text-transform: uppercase; letter-spacing: 0.5px;
+}
+
+.ac-modal-desc {
+  font-size: 0.82rem; color: #888; margin: 0 0 1.25rem; line-height: 1.5;
+}
+
+.ac-modal-form { display: flex; flex-direction: column; gap: 1rem; }
+
+.ac-modal-field { display: flex; flex-direction: column; gap: 0.35rem; }
+.ac-modal-field label {
+  font-size: 0.75rem; font-weight: 600; color: #555;
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+.ac-modal-field input {
+  padding: 0.7rem 1rem; border: 1.5px solid #e0e0e0; border-radius: 10px;
+  font-size: 0.92rem; outline: none; background: #fafbfc;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.ac-modal-field input:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.08);
+  background: #fff;
+}
+
+.ac-modal-actions {
+  display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 0.5rem;
+}
+
+.ac-modal-cancel {
+  padding: 0.6rem 1.25rem; background: #f5f6fa; color: #666;
+  border: 1.5px solid #e0e0e0; border-radius: 8px; font-size: 0.88rem;
+  font-weight: 600; cursor: pointer;
+}
+.ac-modal-cancel:hover { background: #e8e8e8; }
+
+.ac-modal-submit {
+  padding: 0.6rem 1.5rem; background: #1a1a2e; color: #fff;
+  border: none; border-radius: 8px; font-size: 0.88rem;
+  font-weight: 600; cursor: pointer; transition: background 0.2s;
+}
+.ac-modal-submit:hover:not(:disabled) { background: #3498db; }
+.ac-modal-submit:disabled { opacity: 0.6; cursor: not-allowed; }

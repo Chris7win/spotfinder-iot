@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../supabase/client'
 import { jsPDF } from 'jspdf'
-import { Search, MessageCircle, CheckCircle, XCircle, StopCircle } from 'lucide-react'
+import { QRCodeSVG } from 'qrcode.react'
+import { Search, MessageCircle, CheckCircle, XCircle, StopCircle, QrCode, X, CalendarCheck, IndianRupee } from 'lucide-react'
 import './BookingsManager.css'
+
+const RUPEE = '\u20B9'
 
 function generateBookingPDF(b) {
   const doc = new jsPDF({ unit: 'mm', format: [80, 150] })
@@ -54,7 +57,7 @@ function sendBookingWhatsApp(b) {
 ⏱ Duration: ${b.duration || '—'}
 🕐 Arrival: ${b.arrival_time ? new Date(b.arrival_time).toLocaleString('en-IN') : '—'}
 
-💰 Amount: ₹${b.amount}
+💰 Amount: ${RUPEE}${b.amount}
 💳 Payment: ${b.payment_status}
 ✅ Status: ${b.status}
 
@@ -68,6 +71,7 @@ function BookingsManager() {
   const [qrInput, setQrInput]   = useState('')
   const [qrResult, setQrResult] = useState(null)
   const [qrError, setQrError]   = useState('')
+  const [qrModal, setQrModal]   = useState(null)
   const [toast, setToast]       = useState('')
   const [loading, setLoading]   = useState(true)
   const [activeSlots, setActiveSlots] = useState([])
@@ -137,6 +141,10 @@ function BookingsManager() {
     <div className="bm-wrap">
       {toast && <div className="bm-toast">{toast}</div>}
 
+      {/* ── QR Verification ───────────────────────────────── */}
+      <section className="bm-section">
+        <h2 className="bm-section-label"><QrCode size={14} /> QR Verification</h2>
+
       {/* QR Verifier */}
       <div className="bm-panel">
         <h3 className="bm-panel-title"><Search size={15} /> QR Code Verifier</h3>
@@ -153,18 +161,30 @@ function BookingsManager() {
         {qrError && <div className="bm-qr-error">{qrError}</div>}
         {qrResult && (
           <div className="bm-qr-result">
-            <div className="bm-qr-field"><span>Booking ID</span><strong>#{qrResult.booking_id}</strong></div>
-            <div className="bm-qr-field"><span>Customer</span><strong>{qrResult.user_name || '—'}</strong></div>
-            <div className="bm-qr-field"><span>Slot</span><strong>{qrResult.slot_id}</strong></div>
-            <div className="bm-qr-field"><span>Vehicle</span><strong>{qrResult.vehicle_number}</strong></div>
-            <div className="bm-qr-field"><span>Status</span>
-              <span className="bm-status-tag" style={{ background: statusColors[qrResult.status] + '20', color: statusColors[qrResult.status] }}>
-                {qrResult.status}
-              </span>
+            <div className="bm-qr-visual">
+              <QRCodeSVG value={qrResult.qr_token || `booking:${qrResult.booking_id}`} size={120} level="M" />
+            </div>
+            <div className="bm-qr-details">
+              <div className="bm-qr-field"><span>Booking ID</span><strong>#{qrResult.booking_id}</strong></div>
+              <div className="bm-qr-field"><span>Customer</span><strong>{qrResult.user_name || '—'}</strong></div>
+              <div className="bm-qr-field"><span>Slot</span><strong>{qrResult.slot_id}</strong></div>
+              <div className="bm-qr-field"><span>Vehicle</span><strong>{qrResult.vehicle_number}</strong></div>
+              <div className="bm-qr-field"><span>Phone</span><strong>{qrResult.phone || '—'}</strong></div>
+              <div className="bm-qr-field"><span>Amount</span><strong>Rs.{qrResult.amount || 0}</strong></div>
+              <div className="bm-qr-field"><span>Status</span>
+                <span className="bm-status-tag" style={{ background: statusColors[qrResult.status] + '20', color: statusColors[qrResult.status] }}>
+                  {qrResult.status}
+                </span>
+              </div>
             </div>
           </div>
         )}
       </div>
+      </section>
+
+      {/* ── Booking Management ────────────────────────────── */}
+      <section className="bm-section">
+        <h2 className="bm-section-label"><CalendarCheck size={14} /> Booking Management</h2>
 
       {/* Filters */}
       <div className="bm-filters">
@@ -218,7 +238,7 @@ function BookingsManager() {
                     <td>{b.vehicle_type || '—'}</td>
                     <td>{b.arrival_time ? new Date(b.arrival_time).toLocaleString('en-IN') : '—'}</td>
                     <td>{b.duration || '—'}</td>
-                    <td>₹{b.amount || 0}</td>
+                    <td>{RUPEE}{b.amount || 0}</td>
                     <td><span className="bm-pay-tag">{b.payment_status || '—'}</span></td>
                     <td>
                       <span className="bm-status-tag"
@@ -228,6 +248,11 @@ function BookingsManager() {
                     </td>
                     <td>
                       <div className="bm-actions">
+                        {b.qr_token && (
+                          <button className="bm-btn qr" onClick={() => setQrModal(b)}>
+                            <QrCode size={12} />QR
+                          </button>
+                        )}
                         {b.status === 'pending' && (
                           <button className="bm-btn confirm" onClick={() => updateStatus(b.booking_id, 'confirmed')}>
                             <CheckCircle size={12} />Confirm
@@ -262,6 +287,49 @@ function BookingsManager() {
           </div>
         )}
       </div>
+      </section>
+
+      {/* QR Modal */}
+      {qrModal && (
+        <div className="bm-modal-overlay" onClick={() => setQrModal(null)}>
+          <div className="bm-modal" onClick={e => e.stopPropagation()}>
+            <button className="bm-modal-close" onClick={() => setQrModal(null)}><X size={18} /></button>
+            <div className="bm-modal-qr">
+              <QRCodeSVG
+                value={qrModal.qr_token || `booking:${qrModal.booking_id}`}
+                size={180}
+                level="M"
+                includeMargin
+              />
+            </div>
+            <div className="bm-modal-info">
+              <h3>Booking #{qrModal.booking_id?.toString().slice(-6)}</h3>
+              <div className="bm-modal-grid">
+                <div className="bm-modal-field"><span>Customer</span><strong>{qrModal.user_name || '—'}</strong></div>
+                <div className="bm-modal-field"><span>Phone</span><strong>{qrModal.phone || '—'}</strong></div>
+                <div className="bm-modal-field"><span>Vehicle</span><strong>{qrModal.vehicle_number || '—'}</strong></div>
+                <div className="bm-modal-field"><span>Vehicle Type</span><strong>{qrModal.vehicle_type || '—'}</strong></div>
+                <div className="bm-modal-field"><span>Slot</span><strong>{qrModal.slot_id}</strong></div>
+                <div className="bm-modal-field"><span>Duration</span><strong>{qrModal.duration || '—'}</strong></div>
+                <div className="bm-modal-field"><span>Amount</span><strong>Rs.{qrModal.amount || 0}</strong></div>
+                <div className="bm-modal-field"><span>Payment</span><strong>{qrModal.payment_status || '—'}</strong></div>
+                <div className="bm-modal-field"><span>Arrival</span><strong>{qrModal.arrival_time ? new Date(qrModal.arrival_time).toLocaleString('en-IN') : '—'}</strong></div>
+                <div className="bm-modal-field"><span>Status</span>
+                  <span className="bm-status-tag" style={{ background: (statusColors[qrModal.status] || '#999') + '20', color: statusColors[qrModal.status] || '#999' }}>
+                    {qrModal.status}
+                  </span>
+                </div>
+              </div>
+              {qrModal.qr_token && (
+                <div className="bm-modal-token">
+                  <span>Token</span>
+                  <code>{qrModal.qr_token}</code>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

@@ -1,5 +1,26 @@
 .bc-wrap { display: flex; flex-direction: column; gap: 1.5rem; position: relative; }
 
+/* ── Sections ────────────────────────────── */
+.bc-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.bc-section-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: #3498db;
+  padding-bottom: 0.6rem;
+  border-bottom: 2px solid #eaf2fb;
+  margin: 0;
+}
+
 .bc-toast {
   position: fixed; bottom: 2rem; right: 2rem; background: #1a1a2e; color: #fff;
   padding: 0.75rem 1.5rem; border-radius: 8px; font-size: 0.9rem; z-index: 9999;

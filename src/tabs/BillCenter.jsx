@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../supabase/client'
-import { Printer, MessageCircle, Eye } from 'lucide-react'
+import { Printer, MessageCircle, Eye, IndianRupee, BarChart3, Filter, FileText } from 'lucide-react'
 import './BillCenter.css'
+
+const RUPEE = '\u20B9'
 
 function fmtDuration(minutes) {
   if (!minutes) return '—'
@@ -46,7 +48,7 @@ function printBill(b) {
 <div class="row"><span>Slot:</span><span>${b.slot_id}</span></div>
 <div class="row"><span>Duration:</span><span>${fmtDuration(b.duration_minutes)}</span></div>
 <div class="divider"></div>
-<div class="row amount-row"><span>TOTAL:</span><span>\u20B9${b.amount}</span></div>
+<div class="row amount-row"><span>TOTAL:</span><span>${RUPEE}${b.amount}</span></div>
 <div class="row"><span>Payment:</span><span>${b.payment_method || '—'}</span></div>
 <div class="row bold"><span>Status:</span><span>PAID</span></div>
 <div class="divider"></div>
@@ -73,7 +75,7 @@ function sendWhatsApp(b) {
 🅿 Slot: ${b.slot_id}
 ⏱ Duration: ${fmtDuration(b.duration_minutes)}
 
-💰 Amount: ₹${b.amount}
+💰 Amount: ${RUPEE}${b.amount}
 💳 Payment: ${b.payment_method || '—'}
 ✅ Status: Paid
 
@@ -115,7 +117,7 @@ function BillCenter() {
 
   const summaryCards = [
     { label: 'Bills Today',    value: todayBills.length,  color: '#3498db' },
-    { label: 'Revenue Today',  value: `₹${todayAmount}`,  color: '#2ecc71' },
+    { label: 'Revenue Today',  value: `${RUPEE}${todayAmount}`,  color: '#2ecc71' },
     { label: 'Walk-in Bills',  value: walkinCount,         color: '#f39c12' },
     { label: 'Booking Bills',  value: bookingCount,        color: '#9b59b6' },
   ]
@@ -124,6 +126,9 @@ function BillCenter() {
     <div className="bc-wrap">
       {toast && <div className="bc-toast">{toast}</div>}
 
+      {/* ── Quick Summary ──────────────────────────────── */}
+      <section className="bc-section">
+        <h2 className="bc-section-label"><BarChart3 size={14} /> Quick Summary</h2>
       {/* Summary Cards */}
       <div className="bc-summary-grid">
         {summaryCards.map(c => (
@@ -133,7 +138,11 @@ function BillCenter() {
           </div>
         ))}
       </div>
+      </section>
 
+      {/* ── Filters & Bills ──────────────────────────────── */}
+      <section className="bc-section">
+        <h2 className="bc-section-label"><Filter size={14} /> Filters</h2>
       {/* Filters + Export */}
       <div className="bc-filter-bar">
         <input type="date" className="bc-filter" value={filters.date}
@@ -152,7 +161,11 @@ function BillCenter() {
         </select>
         <button className="bc-reset" onClick={() => setFilters({ date: '', type: '', status: '' })}>Reset</button>
       </div>
+      </section>
 
+      {/* ── Bills Table ────────────────────────────────── */}
+      <section className="bc-section">
+        <h2 className="bc-section-label"><FileText size={14} /> All Bills</h2>
       {/* Table */}
       <div className="bc-panel">
         <h3 className="bc-panel-title">All Bills ({bills.length})</h3>
@@ -183,7 +196,7 @@ function BillCenter() {
                     <td>{b.phone || '—'}</td>
                     <td><span className="bc-slot-tag">{b.slot_id}</span></td>
                     <td>{fmtDuration(b.duration_minutes)}</td>
-                    <td className="bc-amount">₹{b.amount}</td>
+                    <td className="bc-amount">{RUPEE}{b.amount}</td>
                     <td>{b.payment_method || '—'}</td>
                     <td>
                       <span className={`bc-status-tag ${b.payment_status}`}>{b.payment_status}</span>
@@ -209,6 +222,7 @@ function BillCenter() {
           </div>
         )}
       </div>
+      </section>
 
       {/* Detail Modal */}
       {modal && (
@@ -220,7 +234,7 @@ function BillCenter() {
                 ['Type', modal.type], ['Customer', modal.user_name], ['Phone', modal.phone],
                 ['Vehicle', modal.vehicle_number], ['Vehicle Type', modal.vehicle_type],
                 ['Slot', modal.slot_id], ['Duration', fmtDuration(modal.duration_minutes)],
-                ['Amount', `₹${modal.amount}`], ['Payment', modal.payment_method],
+                ['Amount', `${RUPEE}${modal.amount}`], ['Payment', modal.payment_method],
                 ['Status', modal.payment_status],
                 ['Entry', modal.entry_time ? new Date(modal.entry_time).toLocaleString('en-IN') : '—'],
                 ['Exit', modal.exit_time ? new Date(modal.exit_time).toLocaleString('en-IN') : '—'],

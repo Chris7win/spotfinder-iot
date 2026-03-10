@@ -3,7 +3,7 @@ import { supabase } from '../supabase/client'
 import { useMqttSlots } from '../hooks/useMqttSlots'
 import {
   Wifi, WifiOff, RefreshCw, CheckCircle, ToggleLeft, ToggleRight,
-  Zap, ZapOff, Lock, Settings2,
+  Zap, ZapOff, Lock, Settings2, Radio, LayoutGrid,
 } from 'lucide-react'
 import './SlotMonitor.css'
 
@@ -132,6 +132,10 @@ function SlotMonitor() {
     <div className="sm-wrap">
       {toast && <div className="sm-toast">{toast}</div>}
 
+      {/* ── Connection Status ──────────────────────────────── */}
+      <section className="sm-section">
+        <h2 className="sm-section-label"><Radio size={14} /> Connection Status</h2>
+
       <div className={`sm-mqtt-bar ${connected ? 'online' : 'offline'}`}>
         {connected
           ? <><Wifi size={14} /> Live MQTT · Last: {lastSeen ? lastSeen.toLocaleTimeString('en-IN') : '—'}</>
@@ -145,6 +149,11 @@ function SlotMonitor() {
         <div className="sm-qs-card booked"><span className="sm-qs-num">{booked}</span><span>Reserved</span></div>
         <div className="sm-qs-card total"><span className="sm-qs-num">{activeSlots.length}</span><span>Active</span></div>
       </div>
+      </section>
+
+      {/* ── Live Slot Status ──────────────────────────────── */}
+      <section className="sm-section">
+        <h2 className="sm-section-label"><LayoutGrid size={14} /> Live Slot Status</h2>
 
       <div className="sm-toolbar">
         <h3 className="sm-section-title">Live Slot Status</h3>
@@ -303,6 +312,11 @@ function SlotMonitor() {
           </table>
         </div>
       )}
+      </section>
+
+      {/* ── Slot Configuration ────────────────────────────── */}
+      <section className="sm-section">
+        <h2 className="sm-section-label"><Settings2 size={14} /> Slot Configuration</h2>
 
       <div className="sm-config-section">
         <div className="sm-config-header">
@@ -325,6 +339,7 @@ function SlotMonitor() {
           Slots 1–4 are hardware-controlled (IR sensors) — override buttons are manual only.
         </p>
       </div>
+      </section>
     </div>
   )
 }

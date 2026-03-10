@@ -2,12 +2,20 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1.25rem;
-  max-width: 700px;
+  max-width: 750px;
   margin: 0 auto;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 640px) {
+  .slot-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+}
+
+@media (max-width: 380px) {
   .slot-grid {
     grid-template-columns: 1fr;
+    gap: 0.65rem;
   }
 }

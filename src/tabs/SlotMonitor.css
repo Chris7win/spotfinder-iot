@@ -1,4 +1,25 @@
-.sm-wrap { position: relative; }
+.sm-wrap { position: relative; display: flex; flex-direction: column; gap: 1.25rem; }
+
+/* ── Sections ────────────────────────────── */
+.sm-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.sm-section-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: #3498db;
+  padding-bottom: 0.6rem;
+  border-bottom: 2px solid #eaf2fb;
+  margin: 0;
+}
 
 .sm-toast {
   position: fixed;
@@ -97,7 +118,6 @@
   border-radius: 8px;
   font-size: 12px;
   font-weight: 500;
-  margin-bottom: 16px;
 }
 .sm-mqtt-bar.online  { background: #e8fdf2; color: #1abc9c; border: 1px solid #b2f0da; }
 .sm-mqtt-bar.offline { background: #fff0f0; color: #e74c3c; border: 1px solid #f5c6c6; }
@@ -146,7 +166,7 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 0.75rem;
-  margin-bottom: 1.25rem;
+  margin-bottom: 0;
 }
 @media (max-width: 600px) { .sm-quick-stats { grid-template-columns: repeat(2, 1fr); } }
 
@@ -179,7 +199,7 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0;
   flex-wrap: wrap;
 }
 .sm-section-title {
@@ -273,7 +293,7 @@
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 1px 6px rgba(0,0,0,0.07);
-  margin-top: 1.5rem;
+  margin-top: 0;
 }
 .sm-config-header {
   display: flex; align-items: center; gap: 8px;

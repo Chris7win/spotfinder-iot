@@ -1,4 +1,4 @@
-import { Lock, LogOut, MapPin } from 'lucide-react'
+import { Lock, LogOut, MapPin, Shield } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../supabase/client'
 import './Navbar.css'
@@ -14,16 +14,28 @@ function Navbar({ mode = 'client', onLockClick, adminEmail }) {
   if (mode === 'admin') {
     return (
       <nav className="navbar">
-        <div className="navbar-brand">
-          <MapPin size={22} color="#3498db" />
-          <span className="navbar-logo-text">SpotFinder <span className="navbar-accent">Admin</span></span>
-        </div>
-        <div className="navbar-right">
-          {adminEmail && <span className="navbar-email">{adminEmail}</span>}
-          <button className="navbar-logout-btn" onClick={handleLogout}>
-            <LogOut size={16} />
-            <span>Logout</span>
-          </button>
+        <div className="navbar-inner">
+          <div className="navbar-brand">
+            <div className="navbar-logo-icon">
+              <MapPin size={20} />
+            </div>
+            <div className="navbar-brand-text">
+              <span className="navbar-logo-text">SpotFinder</span>
+              <span className="navbar-badge">Admin Panel</span>
+            </div>
+          </div>
+          <div className="navbar-right">
+            {adminEmail && (
+              <div className="navbar-user">
+                <Shield size={14} />
+                <span className="navbar-email">{adminEmail}</span>
+              </div>
+            )}
+            <button className="navbar-logout-btn" onClick={handleLogout}>
+              <LogOut size={15} />
+              <span>Logout</span>
+            </button>
+          </div>
         </div>
       </nav>
     )
@@ -31,14 +43,21 @@ function Navbar({ mode = 'client', onLockClick, adminEmail }) {
 
   return (
     <nav className="navbar">
-      <div className="navbar-brand">
-        <MapPin size={22} color="#3498db" />
-        <span className="navbar-logo-text">SpotFinder <span className="navbar-accent">IOT</span></span>
-      </div>
-      <div className="navbar-right">
-        <button className="navbar-lock-btn" onClick={onLockClick} title="Admin Login">
-          <Lock size={14} />
-        </button>
+      <div className="navbar-inner">
+        <div className="navbar-brand">
+          <div className="navbar-logo-icon">
+            <MapPin size={20} />
+          </div>
+          <div className="navbar-brand-text">
+            <span className="navbar-logo-text">SpotFinder</span>
+            <span className="navbar-badge">IOT</span>
+          </div>
+        </div>
+        <div className="navbar-right">
+          <button className="navbar-lock-btn" onClick={onLockClick} title="Admin Login">
+            <Lock size={14} />
+          </button>
+        </div>
       </div>
     </nav>
   )

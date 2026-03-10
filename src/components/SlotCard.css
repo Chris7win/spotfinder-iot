@@ -66,3 +66,41 @@
   font-size: 0.78rem;
   color: #666;
 }
+
+/* ─── Responsive ─────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .slot-card {
+    padding: 1rem;
+    border-radius: 12px;
+    gap: 0.5rem;
+  }
+
+  .slot-id {
+    font-size: 1.15rem;
+  }
+
+  .slot-status-dot {
+    width: 11px;
+    height: 11px;
+  }
+
+  .slot-status-label {
+    font-size: 0.7rem;
+    padding: 2px 8px;
+  }
+
+  .slot-meta {
+    font-size: 0.72rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .slot-card {
+    padding: 0.85rem;
+  }
+
+  .slot-id {
+    font-size: 1.05rem;
+  }
+}
