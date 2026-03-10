@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import mqtt from 'mqtt'
 
-const BROKER   = 'ws://test.mosquitto.org:8081'
+const BROKER   = 'wss://test.mosquitto.org:8884'
 const TOPIC    = 'spotfinder/slots'
 const HW_SLOTS = [1, 2, 3, 4]   // hardware-connected slot IDs
 
