@@ -1,4 +1,4 @@
-﻿.ac-wrap { display: flex; flex-direction: column; gap: 1.5rem; position: relative; }
+.ac-wrap { display: flex; flex-direction: column; gap: 1.5rem; position: relative; }
 .ac-loading { text-align: center; color: #aaa; padding: 2rem; }
 .ac-empty { text-align: center; color: #aaa; padding: 1.5rem; font-size: 0.85rem; }
 
@@ -8,7 +8,7 @@
   box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
 
-/* ── Section Labels ─────────────────────────────────────────── */
+/* -- Section Labels ------------------------------------------- */
 .ac-section {
   display: flex;
   flex-direction: column;
@@ -29,7 +29,7 @@
   margin: 0;
 }
 
-/* ── Panel ──────────────────────────────────────────────────── */
+/* -- Panel ---------------------------------------------------- */
 .ac-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
 @media (max-width: 640px) { .ac-row { grid-template-columns: 1fr; } }
 
@@ -58,7 +58,7 @@
   line-height: 1.5;
 }
 
-/* ── Pricing Table ─────────────────────────────────────────── */
+/* -- Pricing Table ------------------------------------------- */
 .ac-add-btn {
   display: flex; align-items: center; gap: 5px;
   padding: 7px 16px; background: #3498db; color: #fff;
@@ -104,7 +104,7 @@
 .ac-pricing-del:hover { background: #ffe0e0; }
 .ac-saved-badge { font-size: 0.72rem; color: #27ae60; font-weight: 600; margin-left: 4px; }
 
-/* ── Income Cards ──────────────────────────────────────────── */
+/* -- Income Cards -------------------------------------------- */
 .ac-period-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-bottom: 1rem; }
 
 .ac-period-card {
@@ -139,7 +139,7 @@
 .ac-btn.pdf   { background: #f5f0ff; color: #9b59b6; }
 .ac-btn.excel { background: #e8fff0; color: #27ae60; }
 
-/* ── Analytics Stats ───────────────────────────────────────── */
+/* -- Analytics Stats ----------------------------------------- */
 .ac-analytics-stats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -160,7 +160,7 @@
 .ac-an-label { font-size: 0.78rem; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
 .ac-an-sub   { font-size: 0.75rem; color: #bbb; }
 
-/* ── Add Rate Modal ────────────────────────────────────────── */
+/* -- Add Rate Modal ------------------------------------------ */
 .ac-modal-overlay {
   position: fixed; inset: 0; background: rgba(0,0,0,0.45);
   backdrop-filter: blur(4px); display: flex; align-items: center;
